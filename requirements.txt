@@ -3,3 +3,5 @@ flask_cors
 gspread
 google-auth
 oauth2client
+python-dotenv
+line-bot-sdk
