@@ -1,12 +1,11 @@
 import requests
 import os
 from dotenv import load_dotenv
-from ..config import LINE_CHANNEL_ACCESS_TOKEN
+from config import LINE_CHANNEL_ACCESS_TOKEN
 
 
 load_dotenv()  # load environment variables from .env file
 
-# 你的長效 Channel Access Token（請保密）
 LINE_CHANNEL_ACCESS_TOKEN = os.getenv("LINE_CHANNEL_ACCESS_TOKEN")
 if not LINE_CHANNEL_ACCESS_TOKEN:
     raise EnvironmentError("❌ LINE_CHANNEL_ACCESS_TOKEN is missing. Please check .env or deployment environment variables.")
