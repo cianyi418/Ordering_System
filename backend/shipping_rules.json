@@ -1,0 +1,31 @@
+{
+  "711": {
+    "base_fee": 129,
+    "cod_extra": 5,
+    "delivery_cod_hint": "139",
+    "free_shipping_item_count": 10
+  },
+  "face_to_face": [
+    {
+      "free_shipping_min": 1000,
+      "regions": [
+        "屏東市",
+        "長治",
+        "麟洛",
+        "西勢",
+        "海豐",
+        "繁華"
+      ]
+    },
+    {
+      "free_shipping_min": 1500,
+      "regions": [
+        "鹽埔",
+        "內埔",
+        "萬丹",
+        "九如",
+        "潮州"
+      ]
+    }
+  ]
+}

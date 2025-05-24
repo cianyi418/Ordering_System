@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>訂單明細</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <script src="config.js"></script>
+</head>
+
+<body class="bg-gray-100 p-4 font-sans">
+  <div class="max-w-xl mx-auto bg-white rounded-lg shadow p-6">
+    <h1 class="text-2xl font-bold mb-4 text-center">訂單明細</h1>
+    <div id="content" class="text-gray-800">載入中...</div>
+  </div>
+
+  <script>
+    async function fetchOrderDetail() {
+      const orderId = new URLSearchParams(window.location.search).get("order_id");
+      const contentEl = document.getElementById("content");
+
+      if (!orderId) {
+        contentEl.innerText = "❗ 找不到訂單編號";
+        return;
+      }
+
+      const res = await fetch("/get-orders");
+      const data = await res.json();
+      const orders = data.filter(o => o['訂單編號'] === orderId);
+
+      if (!orders.length) {
+        contentEl.innerText = "❗ 查無訂單資料";
+        return;
+      }
+
+      const info = orders[0];
+
+      let html = `
+        <p class="text-sm text-gray-600">訂單編號：${orderId}</p>
+        <p class="text-sm text-gray-600 mb-4">下單時間：${info['訂購時間']}</p>
+
+        <h2 class="font-bold mb-2">商品明細：</h2>
+        <table class="w-full text-sm mb-2">
+          <tbody>
+      `;
+
+      let subtotal = 0;
+      let shippingFee = 0;
+      for (const item of orders) {
+        const name = item['商品名稱'];
+        const qty = Number(item['數量']);
+        const price = Number(item['單價']);
+        const lineTotal = Number(item['小計金額']);
+
+        if (name === '運費') {
+          shippingFee += lineTotal;
+          continue;
+        }
+
+        subtotal += lineTotal;
+        html += `
+          <tr>
+            <td class="py-1">${name} x${qty}</td>
+            <td class="text-right py-1">$${lineTotal}</td>
+          </tr>
+        `;
+      }
+
+      html += `
+          </tbody>
+        </table>
+        <div class="flex justify-between text-sm mb-4">
+          <span>商品小計：</span><span>$${subtotal}</span>
+        </div>
+        <div class="flex justify-between text-sm mb-4">
+          <span>運費：</span><span>$${shippingFee}</span>
+        </div>
+        <p class="text-sm">取貨方式：${info['取貨方式']}</p>
+        <p class="text-sm">門市資訊：${info['門市資訊']}</p>
+        <p class="text-sm mb-2">備註：</p>
+        <textarea disabled class="w-full p-2 border rounded bg-gray-50 text-sm mb-4">${info['備註'] || '-'}</textarea>
+
+        <div class="text-sm flex justify-between mb-1">
+          <span>付款狀態：</span>
+          <span class="${info['付款狀態'] === '已付款' ? 'text-green-600' : 'text-red-600'}">
+            ${info['付款狀態'] || '未付款'}
+          </span>
+        </div>
+        <div class="text-sm flex justify-between mb-1">
+          <span>出貨狀態：</span>
+          <span class="${info['出貨狀態'] === '已出貨' ? 'text-green-600' : 'text-red-600'}">
+            ${info['出貨狀態'] || '未出貨'}
+          </span>
+        </div>
+
+        <div class="text-right font-bold text-lg mt-2">
+          💰 總金額：$${subtotal + shippingFee}
+        </div>
+      `;
+
+      contentEl.innerHTML = html;
+    }
+
+    window.onload = fetchOrderDetail;
+  </script>
+</body>
+
+</html>

@@ -1,0 +1,62 @@
+# macOS 系統產生檔案
+.DS_Store
+
+# Python 編譯產生的檔案與資料夾
+__pycache__/
+*.py[cod]
+*.pyc
+venv/
+.venv/
+
+# 環境與機密
+.env
+credentials.json
+
+# 備份檔案
+*.bak
+
+# 其他 IDE / Editor 常見暫存檔（選填）
+*.swp
+*.swo
+*.log
+*.tmp
+
+# VSCode
+.vscode/
+
+# Visual Studio Code
+node_modules/
+dist/
+
+# 前端環境變數
+.env.local
+.env.development
+.env.production
+.env.*
+
+# 資料庫
+*.sqlite3
+*.db
+
+# 憑證
+*.pem
+*.key
+*.crt
+*.p12
+
+# 前端測試/打包暫存
+coverage/
+.parcel-cache/
+.next/
+.nuxt/
+
+# log 資料夾
+logs/
+
+# Backup files
+*_bak.html
+*_bakup.html
+admin_bak.html
+order_bakup.html
+order_detail_bakup.html
+order_status_bakup.html
