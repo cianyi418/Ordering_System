@@ -1,15 +1,15 @@
 from flask import Flask, request, send_from_directory, jsonify, make_response, abort
 from flask_cors import CORS
 from config import GOOGLE_SHEET_ID, LINE_UID, LINE_TEST_UID, ADMIN_PASSWORD, ORDER_DETAIL_BASE_URL, LINE_CHANNEL_SECRET, LINE_CHANNEL_ACCESS_TOKEN
-from .services.google_sheet import get_sheet 
+from services.google_sheet import get_sheet 
 import json
 import os
 from flask_cors import CORS
 from datetime import datetime
-from .utils import append_by_header
+from utils import append_by_header
 import logging
-from .flex_templates import build_order_flex
-from .services.line_notify import send_line_message # Import the function to send LINE messages
+from flex_templates import build_order_flex
+from services.line_notify import send_line_message # Import the function to send LINE messages
 from linebot import LineBotApi, WebhookHandler
 from linebot.exceptions import InvalidSignatureError
 from linebot.models import MessageEvent, TextMessage, TextSendMessage, PostbackEvent
