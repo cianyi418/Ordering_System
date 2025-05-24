@@ -1,15 +1,5 @@
 import requests
-import os
-from dotenv import load_dotenv
-from config import LINE_CHANNEL_ACCESS_TOKEN
-
-
-load_dotenv()  # load environment variables from .env file
-
-LINE_CHANNEL_ACCESS_TOKEN = os.getenv("LINE_CHANNEL_ACCESS_TOKEN")
-if not LINE_CHANNEL_ACCESS_TOKEN:
-    raise EnvironmentError("❌ LINE_CHANNEL_ACCESS_TOKEN is missing. Please check .env or deployment environment variables.")
-
+from backend.config import LINE_CHANNEL_ACCESS_TOKEN
 
 def send_line_message(uid, message_type='text', content='Hello'):
     headers = {

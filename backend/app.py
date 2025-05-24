@@ -35,14 +35,32 @@ CORS(app, resources={r"/*": {"origins": [
     "http://127.0.0.1:5173",
     "https://your-custom-domain.com", # replace with your custom domain
     "https://lineapporderingsystem-production.up.railway.app"
-]}}) # provide CORS for local testing
+]}}) # provide CORS for local 
+
+'''
+# Backend API to get the test UID
+# This is used for local testing only
+@app.route('/test-uid')
+def get_test_uid():
+    try:
+        print("DEBUG FLASK_ENV (app.py):", FLASK_ENV)
+        print("DEBUG LINE_TEST_UID (app.py):", LINE_TEST_UID)
+        print("DEBUG type FLASK_ENV:", type(FLASK_ENV))
+        print("DEBUG type LINE_TEST_UID:", type(LINE_TEST_UID))
+        return jsonify({
+            "uid": LINE_TEST_UID if FLASK_ENV == "development" else ""
+        })
+    except Exception as e:
+        print("❗ /test-uid error:", e)
+        return jsonify({"error": str(e)}), 500
+'''
 
 # Set the secret key for session management
 @app.route('/', defaults={'path': ''})
 @app.route('/<path:path>')
 def serve_vue_app(path):
-    if FLASK_ENV == 'development':
-        return "Flask does not serve index.html in development. Use Vite dev server.", 404
+    if path == "" or path == "/":
+        return send_from_directory(app.static_folder, 'index.html')
     file_path = os.path.join(app.static_folder, path)
     if os.path.exists(file_path):
         return send_from_directory(app.static_folder, path)

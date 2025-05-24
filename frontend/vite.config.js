@@ -5,6 +5,8 @@ export default defineConfig({
   plugins: [vue()],
   server: {
     proxy: {
+      "/test-uid": "http://localhost:8080",
+      "/menu": "http://localhost:8080",
       "/get-orders": "http://localhost:8080",
       "/order": "http://localhost:8080",
       "/user-info": "http://localhost:8080",

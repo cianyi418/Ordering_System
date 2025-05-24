@@ -1,6 +1,6 @@
 import gspread
 from oauth2client.service_account import ServiceAccountCredentials
-from config import get_google_credentials, GOOGLE_SHEET_ID
+from backend.config import get_google_credentials, GOOGLE_SHEET_ID
 
 scope = [
     "https://spreadsheets.google.com/feeds",

@@ -1,5 +1,5 @@
 from datetime import datetime
-from config import ORDER_DETAIL_BASE_URL
+from backend.config import ORDER_DETAIL_BASE_URL
 
 def build_order_flex(order_id, order_items, delivery, total, store_info='', order_time=None):
     max_display = 5
