@@ -1,21 +1,22 @@
 from flask import Flask, request, send_from_directory, jsonify, make_response, abort
 from flask_cors import CORS
-from config import GOOGLE_SHEET_ID, LINE_UID, LINE_TEST_UID, ADMIN_PASSWORD, ORDER_DETAIL_BASE_URL, LINE_CHANNEL_SECRET, LINE_CHANNEL_ACCESS_TOKEN
-from services.google_sheet import get_sheet 
+from backend.config import GOOGLE_SHEET_ID, FLASK_ENV, LINE_UID, LINE_TEST_UID, ADMIN_PASSWORD, ORDER_DETAIL_BASE_URL, LINE_CHANNEL_SECRET, LINE_CHANNEL_ACCESS_TOKEN
+from backend.services.google_sheet import get_sheet 
 import json
 import os
 from flask_cors import CORS
 from datetime import datetime
-from utils import append_by_header
+from backend.utils import append_by_header
 import logging
-from flex_templates import build_order_flex
-from services.line_notify import send_line_message # Import the function to send LINE messages
+from backend.flex_templates import build_order_flex
+from backend.services.line_notify import send_line_message # Import the function to send LINE messages
 from linebot import LineBotApi, WebhookHandler
 from linebot.exceptions import InvalidSignatureError
 from linebot.models import MessageEvent, TextMessage, TextSendMessage, PostbackEvent
 
+
 # Load environment variables
-FLASK_ENV = os.getenv('FLASK_ENV', 'production')
+#FLASK_ENV = os.getenv('FLASK_ENV', 'production')
 
 
 # Set up logging
@@ -472,19 +473,12 @@ def handle_text(event):
             TextSendMessage(text="請稍候，客服會盡快與您聯繫：）")
         )
 
-'''
+
 # for local testing
+'''
 @app.route('/admin')
 def admin_page():
     return send_from_directory('static', 'admin.html')
-
-# Backend API to get the test UID
-# This is used for local testing only
-@app.route('/test-uid')
-def get_test_uid():
-    return jsonify({
-        "uid": LINE_TEST_UID if FLASK_ENV == "development" else ""
-    })
 '''
 
 
