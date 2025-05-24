@@ -36,7 +36,7 @@ CORS(app, resources={r"/*": {"origins": [
     "http://127.0.0.1:5173",
     "https://your-custom-domain.com", # replace with your custom domain
     "https://lineapporderingsystem-production.up.railway.app"
-]}}) # provide CORS for local 
+]}}) 
 
 '''
 # Backend API to get the test UID
