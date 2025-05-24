@@ -27,14 +27,12 @@ handler = WebhookHandler(LINE_CHANNEL_SECRET)
 
 app = Flask(__name__, static_folder='static')
 CORS(app, resources={r"/*": {"origins": [
-    '''
     "http://localhost:5500", 
     "http://127.0.0.1:5500",
     "http://localhost:8080",
     "http://127.0.0.1:8080",
     "http://localhost:5173",
     "http://127.0.0.1:5173",
-    '''
     "https://your-custom-domain.com", # replace with your custom domain
     "https://lineapporderingsystem-production.up.railway.app"
 ]}}) # provide CORS for local testing
