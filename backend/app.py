@@ -416,9 +416,11 @@ def check_admin_password():
         return jsonify({'status': 'success'})
     return jsonify({'status': 'fail'}), 401
 
+'''
 @app.route('/order/<order_id>')
 def order_detail(order_id):
     return send_from_directory('static', 'order_detail.html')
+'''
 
 # order status page
 '''
