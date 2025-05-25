@@ -14,6 +14,7 @@ async function initApp() {
     await window.liff.init({
       liffId: import.meta.env.VITE_LIFF_ID, // recieive LIFF ID from environment variables
     });
+    console.log("VITE_LIFF_ID =", import.meta.env.VITE_LIFF_ID);
 
     console.log("✅ LIFF 初始化成功", window.liff.getContext());
 
