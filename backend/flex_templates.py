@@ -100,7 +100,6 @@ def build_order_flex(order_id, order_items, delivery, total, store_info='', orde
     }
 
     return {
-        "type": "flex",
-        "altText": f"📦 老宅私廚 訂單通知（{order_id}）",
+        "altText": f"訂單成立通知：{order_id}",
         "contents": bubble
     }
