@@ -442,14 +442,15 @@ def webhook():
 @app.route('/', defaults={'path': ''})
 @app.route('/<path:path>')
 def serve_vue_app(path):
-    file_path = os.path.join(app.static_folder, path)
-
     # Prevent directory traversal attacks
     if '..' in path or path.startswith('/'):
         abort(400)
 
-    if path != "" and os.path.exists(file_path):
+    full_path = os.path.join(app.static_folder, path)
+
+    if os.path.isfile(full_path):
         return send_from_directory(app.static_folder, path)
+    
     return send_from_directory(app.static_folder, 'index.html')
 
 
