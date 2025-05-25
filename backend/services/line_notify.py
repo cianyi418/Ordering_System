@@ -1,5 +1,6 @@
 import requests
 import logging
+import json
 from backend.config import LINE_CHANNEL_ACCESS_TOKEN
 
 def send_line_message(uid, message_type='text', content='Hello'):
@@ -26,6 +27,7 @@ def send_line_message(uid, message_type='text', content='Hello'):
     }
 
     logging.info("📤 準備推播：%s", payload)
+    logging.info((json.dumps(payload, ensure_ascii=False, indent=2)))
 
     try:
         response = requests.post(

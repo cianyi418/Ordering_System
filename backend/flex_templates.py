@@ -38,7 +38,7 @@ def build_order_flex(order_id, order_items, delivery, total, store_info='', orde
     shipping_fee = int(next((item['price'] for item in order_items if item['product'] == '運費'), 0))
     order_time_str = order_time or datetime.now().strftime("%Y-%m-%d %H:%M")
 
-    return {
+    bubble = {
         "type": "bubble",
         "size": "mega",
         "header": {
@@ -92,11 +92,17 @@ def build_order_flex(order_id, order_items, delivery, total, store_info='', orde
                     "style": "primary",
                     "color": "#999999",
                     "action": {
-                    "type": "postback",
-                    "label": "聯絡客服",
-                    "data": "action=contact"
-                   }
+                        "type": "postback",
+                        "label": "聯絡客服",
+                        "data": "action=contact"
+                    }
                 }
             ]
         }
+    }
+
+    return {
+        "type": "flex",
+        "altText": f"📦 老宅私廚 訂單通知（{order_id}）",
+        "contents": bubble
     }
