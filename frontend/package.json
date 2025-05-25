@@ -6,6 +6,7 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
+    "build:prod": "vite build && rsync -a dist/ ../backend/static/ --exclude=config.js",
     "preview": "vite preview"
   },
   "dependencies": {

@@ -442,9 +442,8 @@ def webhook():
 @app.route('/', defaults={'path': ''})
 @app.route('/<path:path>')
 def serve_vue_app(path):
-    if path == "" or path == "/":
-        return send_from_directory(app.static_folder, 'index.html')
     file_path = os.path.join(app.static_folder, path)
+    # Check if the requested file exists
     if os.path.exists(file_path):
         return send_from_directory(app.static_folder, path)
     else:
