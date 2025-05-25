@@ -9,15 +9,17 @@ def send_line_message(uid, message_type='text', content='Hello'):
         "Authorization": f"Bearer {LINE_CHANNEL_ACCESS_TOKEN}"
     }
 
-    message = {
-        "type": message_type,
-        "altText": "訂單通知" if message_type == 'flex' else content
-    }
-
     if message_type == 'text':
-        message['text'] = content
+        message = {
+            "type": "text",
+            "text": content
+        }
     elif message_type == 'flex':
-        message['contents'] = content
+        message = {
+            "type": "flex",
+            "altText": "📦 老宅私廚 訂單通知",
+            "contents": content  # <-- 確保是單純 bubble 結構
+        }
     else:
         raise ValueError(f"Unsupported message type: {message_type}")
 
@@ -27,7 +29,7 @@ def send_line_message(uid, message_type='text', content='Hello'):
     }
 
     logging.info("📤 準備推播：%s", payload)
-    logging.info((json.dumps(payload, ensure_ascii=False, indent=2)))
+    logging.info("📤 傳送內容:\n%s", json.dumps(payload, ensure_ascii=False, indent=2))
 
     try:
         response = requests.post(
@@ -37,7 +39,6 @@ def send_line_message(uid, message_type='text', content='Hello'):
         )
         print(f"📤 LINE 推播結果：{response.status_code}")
         print(response.text)
-
 
         if response.status_code != 200:
             logging.error("❌ 推播失敗：%s %s", response.status_code, response.text)

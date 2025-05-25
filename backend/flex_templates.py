@@ -38,7 +38,7 @@ def build_order_flex(order_id, order_items, delivery, total, store_info='', orde
     shipping_fee = int(next((item['price'] for item in order_items if item['product'] == '運費'), 0))
     order_time_str = order_time or datetime.now().strftime("%Y-%m-%d %H:%M")
 
-    bubble = {
+    return {
         "type": "bubble",
         "size": "mega",
         "header": {
@@ -99,10 +99,4 @@ def build_order_flex(order_id, order_items, delivery, total, store_info='', orde
                 }
             ]
         }
-    }
-
-    return {
-        "type": "flex",
-        "altText": f"📦 老宅私廚 訂單通知（{order_id}）",
-        "contents": bubble
     }
