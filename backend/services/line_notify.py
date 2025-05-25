@@ -35,6 +35,9 @@ def send_line_message(uid, message_type='text', content='Hello'):
             headers=headers,
             json=payload
         )
+        print(f"📤 LINE 推播結果：{response.status_code}")
+        print(response.text)
+
 
         if response.status_code != 200:
             logging.error("❌ 推播失敗：%s %s", response.status_code, response.text)
