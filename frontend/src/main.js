@@ -19,6 +19,13 @@ async function initApp() {
     await window.liff.init({ liffId });
     console.log("✅ LIFF 初始化成功", window.liff.getContext());
 
+    // Automatically direct order-detail (if there is order_id)
+    const params = new URLSearchParams(window.location.search);
+    const orderId = params.get("order_id");
+    if (orderId && window.location.pathname === "/") {
+      router.replace(`/order-detail?order_id=${orderId}`);
+    }
+
     createApp(App).use(router).mount("#app");
   } catch (err) {
     console.error("❌ LIFF 初始化失敗", err);
