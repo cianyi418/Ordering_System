@@ -1,4 +1,5 @@
 import requests
+import logging
 from backend.config import LINE_CHANNEL_ACCESS_TOKEN
 
 def send_line_message(uid, message_type='text', content='Hello'):
@@ -24,10 +25,22 @@ def send_line_message(uid, message_type='text', content='Hello'):
         "messages": [message]
     }
 
-    response = requests.post(
-        "https://api.line.me/v2/bot/message/push",
-        headers=headers,
-        json=payload
-    )
+    logging.info("📤 準備推播：%s", payload)
 
-    return response.status_code, response.text
+    try:
+        response = requests.post(
+            "https://api.line.me/v2/bot/message/push",
+            headers=headers,
+            json=payload
+        )
+
+        if response.status_code != 200:
+            logging.error("❌ 推播失敗：%s %s", response.status_code, response.text)
+        else:
+            logging.info("✅ 推播成功：%s", uid)
+
+        return response.status_code, response.text
+
+    except Exception as e:
+        logging.exception("❗ 推播時發生例外錯誤")
+        return 500, str(e)
