@@ -15,7 +15,7 @@ ADMIN_PASSWORD = os.getenv("ADMIN_PASSWORD")
 NGROK_BASE_URL = os.getenv("NGROK_BASE_URL", "http://localhost:8080")
 
 ORDER_DETAIL_BASE_URL = os.getenv("ORDER_DETAIL_BASE_URL", "http://localhost:8080")
-LIFF_ID = os.getenv("LIFF_ID", "default-liff-id")
+VITE_LIFF_ID = os.getenv("VITE_LIFF_ID", "default-liff-id")
 
 from flask import Flask
 
@@ -25,7 +25,7 @@ try:
     config_path = os.path.join(app.static_folder, 'config.js')
     with open(config_path, "w", encoding="utf-8") as f:
         f.write(f'window.APP_CONFIG = {{\n'
-                f'  liffId: "{LIFF_ID}",\n'
+                f'  liffId: "{VITE_LIFF_ID}",\n'
                 f'  orderDetailBaseUrl: "{ORDER_DETAIL_BASE_URL}"\n'
                 f'}};')
     if FLASK_ENV == "development":
