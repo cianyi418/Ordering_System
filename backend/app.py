@@ -490,7 +490,7 @@ def add_csp_headers(response):
         "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdn.jsdelivr.net https://cdn.tailwindcss.com; "
         "font-src 'self' https://fonts.gstatic.com https://cdn.jsdelivr.net https://cdn.tailwindcss.com; "
         "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://cdn.jsdelivr.net https://cdn.tailwindcss.com https://static.line-scdn.net; "
-        "connect-src 'self' https://api.line.me https://notify-api.line.me https://static.line-scdn.net https://liffsdk.line-scdn.net https://lineapporderingsystem-production.up.railway.app http://localhost:8080 http://127.0.0.1:8080; "
+        "connect-src 'self' https://api.line.me https://notify-api.line.me https://static.line-scdn.net https://liffsdk.line-scdn.net https://orderingsystem-production.up.railway.app http://localhost:8080 http://127.0.0.1:8080; "
         "img-src * data:;"
     )
     return response
