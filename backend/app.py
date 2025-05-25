@@ -56,19 +56,6 @@ def get_test_uid():
         return jsonify({"error": str(e)}), 500
 '''
 
-# Set the secret key for session management
-@app.route('/', defaults={'path': ''})
-@app.route('/<path:path>')
-def serve_vue_app(path):
-    if path == "" or path == "/":
-        return send_from_directory(app.static_folder, 'index.html')
-    file_path = os.path.join(app.static_folder, path)
-    if os.path.exists(file_path):
-        return send_from_directory(app.static_folder, path)
-    else:
-        return send_from_directory(app.static_folder, 'index.html')
-
-
 # Backend API to serve the menu
 # Provide the menu data from a JSON file
 @app.route('/menu')
@@ -450,6 +437,18 @@ def webhook():
         abort(400)
 
     return 'OK'
+
+# Set the secret key for session management
+@app.route('/', defaults={'path': ''})
+@app.route('/<path:path>')
+def serve_vue_app(path):
+    if path == "" or path == "/":
+        return send_from_directory(app.static_folder, 'index.html')
+    file_path = os.path.join(app.static_folder, path)
+    if os.path.exists(file_path):
+        return send_from_directory(app.static_folder, path)
+    else:
+        return send_from_directory(app.static_folder, 'index.html')
 
 @handler.add(PostbackEvent)
 def handle_postback(event):
