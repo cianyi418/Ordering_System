@@ -35,7 +35,6 @@ def build_order_flex(order_id, order_items, delivery, total, store_info='', orde
     order_time_str = order_time or datetime.now().strftime("%Y-%m-%d %H:%M")
 
     uri = f"{ORDER_DETAIL_BASE_URL}?order_id={order_id}"
-    print("DEBUG URI:", uri)
     
     bubble = {
         "type": "bubble",

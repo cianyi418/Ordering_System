@@ -29,7 +29,8 @@ def send_line_message(uid, message_type='text', content='Hello'):
     }
 
     logging.info("📤 準備推播：%s", payload)
-    logging.info("📤 傳送內容:\n%s", json.dumps(payload, ensure_ascii=False, indent=2))
+    print("=== 最終送出的 payload ===")
+    print(json.dumps(payload, ensure_ascii=False, indent=2))
 
     try:
         # Check for illegal characters
