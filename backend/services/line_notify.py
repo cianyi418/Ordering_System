@@ -14,12 +14,25 @@ def send_line_message(uid, message_type='text', content='Hello'):
             "type": "text",
             "text": content
         }
+
     elif message_type == 'flex':
+        #  Check if content is a valid JSON string
+        if 'footer' in content:
+            for item in content['footer'].get('contents', []):
+                if item.get('type') == 'button':
+                    action = item.get('action', {})
+                    if action.get('type') == 'uri':
+                        uri = action.get('uri', '')
+                        if ';' in uri:
+                            logging.warning("🚨 發現 URI 中的分號，自動移除：%s", uri)
+                            action['uri'] = uri.replace(';', '')
+
         message = {
             "type": "flex",
             "altText": "📦 老宅私廚 訂單通知",
-            "contents": content  
+            "contents": content
         }
+
     else:
         raise ValueError(f"Unsupported message type: {message_type}")
 
