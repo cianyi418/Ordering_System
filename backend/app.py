@@ -421,9 +421,11 @@ def order_detail(order_id):
     return send_from_directory('static', 'order_detail.html')
 
 # order status page
+'''
 @app.route('/order-status')
 def order_status_page():
     return send_from_directory('static', 'order_status.html')
+'''
 
 # LINE webhook
 @app.route("/webhook", methods=['POST'])
