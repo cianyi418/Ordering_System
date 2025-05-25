@@ -7,13 +7,11 @@ def build_order_flex(order_id, order_items, delivery, total, store_info='', orde
     display_items = visible_items[:max_display]
 
     DELIVERY_DISPLAY = {
-    "711-unpaid": "7-11 超商（純取貨）",
-    "711-paid": "7-11 超商（取貨付款）",
-    "pickup": "面交取貨"
+        "711-unpaid": "7-11 超商（純取貨）",
+        "711-paid": "7-11 超商（取貨付款）",
+        "pickup": "面交取貨"
     }
 
-
-    # product lines for the flex message
     product_lines = [
         {
             "type": "text",
@@ -24,7 +22,6 @@ def build_order_flex(order_id, order_items, delivery, total, store_info='', orde
         for item in display_items
     ]
 
-    # if there are more items than max_display, add a line indicating the number of additional items
     if len(visible_items) > max_display:
         product_lines.append({
             "type": "text",
@@ -34,11 +31,12 @@ def build_order_flex(order_id, order_items, delivery, total, store_info='', orde
             "wrap": True
         })
 
-    # shipping fee and order time
     shipping_fee = int(next((item['price'] for item in order_items if item['product'] == '運費'), 0))
     order_time_str = order_time or datetime.now().strftime("%Y-%m-%d %H:%M")
 
-    return {
+    uri = f"{ORDER_DETAIL_BASE_URL}/order/{order_id}"
+
+    bubble = {
         "type": "bubble",
         "size": "mega",
         "header": {
@@ -84,7 +82,7 @@ def build_order_flex(order_id, order_items, delivery, total, store_info='', orde
                     "action": {
                         "type": "uri",
                         "label": "查看訂單明細",
-                        "uri": f"{ORDER_DETAIL_BASE_URL}/order/{order_id}"
+                        "uri": uri
                     }
                 },
                 {
@@ -99,4 +97,10 @@ def build_order_flex(order_id, order_items, delivery, total, store_info='', orde
                 }
             ]
         }
+    }
+
+    return {
+        "type": "flex",
+        "altText": f"📦 老宅私廚 訂單通知（{order_id}）",
+        "contents": bubble
     }

@@ -14,25 +14,12 @@ def send_line_message(uid, message_type='text', content='Hello'):
             "type": "text",
             "text": content
         }
-
     elif message_type == 'flex':
-        #  Check if content is a valid JSON string
-        if 'footer' in content:
-            for item in content['footer'].get('contents', []):
-                if item.get('type') == 'button':
-                    action = item.get('action', {})
-                    if action.get('type') == 'uri':
-                        uri = action.get('uri', '')
-                        if ';' in uri:
-                            logging.warning("🚨 發現 URI 中的分號，自動移除：%s", uri)
-                            action['uri'] = uri.replace(';', '')
-
         message = {
             "type": "flex",
-            "altText": "📦 老宅私廚 訂單通知",
-            "contents": content
+            "altText": content.get("altText", "📦 老宅私廚 訂單通知"),
+            "contents": content["contents"]
         }
-
     else:
         raise ValueError(f"Unsupported message type: {message_type}")
 
@@ -45,11 +32,20 @@ def send_line_message(uid, message_type='text', content='Hello'):
     logging.info("📤 傳送內容:\n%s", json.dumps(payload, ensure_ascii=False, indent=2))
 
     try:
+        # Check for illegal characters
+        if message_type == 'flex':
+            uri = message["contents"]["footer"]["contents"][0]["action"]["uri"]
+            if ';' in uri:
+                uri_clean = uri.replace(';', '')
+                logging.warning("🚨 URI 中含有非法分號，已移除：%s", uri_clean)
+                message["contents"]["footer"]["contents"][0]["action"]["uri"] = uri_clean
+
         response = requests.post(
             "https://api.line.me/v2/bot/message/push",
             headers=headers,
             json=payload
         )
+
         print(f"📤 LINE 推播結果：{response.status_code}")
         print(response.text)
 
