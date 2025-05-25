@@ -443,11 +443,15 @@ def webhook():
 @app.route('/<path:path>')
 def serve_vue_app(path):
     file_path = os.path.join(app.static_folder, path)
-    # Check if the requested file exists
-    if os.path.exists(file_path):
+
+    # Prevent directory traversal attacks
+    if '..' in path or path.startswith('/'):
+        abort(400)
+
+    if path != "" and os.path.exists(file_path):
         return send_from_directory(app.static_folder, path)
-    else:
-        return send_from_directory(app.static_folder, 'index.html')
+    return send_from_directory(app.static_folder, 'index.html')
+
 
 @handler.add(PostbackEvent)
 def handle_postback(event):
