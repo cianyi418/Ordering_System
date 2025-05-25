@@ -18,7 +18,7 @@ def send_line_message(uid, message_type='text', content='Hello'):
         message = {
             "type": "flex",
             "altText": "📦 老宅私廚 訂單通知",
-            "contents": content  # <-- 確保是單純 bubble 結構
+            "contents": content  
         }
     else:
         raise ValueError(f"Unsupported message type: {message_type}")
