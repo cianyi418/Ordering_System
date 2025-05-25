@@ -446,9 +446,9 @@ def serve_vue_app(path):
     if '..' in path or path.startswith('/'):
         abort(400)
 
-    full_path = os.path.join(app.static_folder, path)
+    file_path = os.path.join(app.static_folder, path)
 
-    if os.path.isfile(full_path):
+    if os.path.isfile(file_path):
         return send_from_directory(app.static_folder, path)
     
     return send_from_directory(app.static_folder, 'index.html')
