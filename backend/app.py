@@ -480,18 +480,18 @@ def admin_page():
     return send_from_directory('static', 'admin.html')
 '''
 
-
 @app.after_request
 def add_csp_headers(response):
     response.headers['Content-Security-Policy'] = (
-        "default-src 'self' http://localhost:8080 http://127.0.0.1:8080 https://fonts.googleapis.com https://fonts.gstatic.com https://cdn.jsdelivr.net https://cdn.tailwindcss.com https://static.line-scdn.net; "
+        "default-src 'self' https://* http://localhost:8080 http://127.0.0.1:8080; "
         "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdn.jsdelivr.net https://cdn.tailwindcss.com; "
         "font-src 'self' https://fonts.gstatic.com https://cdn.jsdelivr.net https://cdn.tailwindcss.com; "
         "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://cdn.jsdelivr.net https://cdn.tailwindcss.com https://static.line-scdn.net; "
-        "connect-src 'self' http://localhost:8080 http://127.0.0.1:8080 https://static.line-scdn.net https://lineapporderingsystem-production.up.railway.app; "
+        "connect-src 'self' https://api.line.me https://notify-api.line.me https://static.line-scdn.net https://lineapporderingsystem-production.up.railway.app http://localhost:8080 http://127.0.0.1:8080; "
         "img-src * data:;"
     )
     return response
+
 
 if __name__ == '__main__':
     # Enable Flask application to run on a specific port
