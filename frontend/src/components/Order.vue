@@ -5,7 +5,7 @@ import { ref, reactive, computed, watch, onMounted } from 'vue'
 const isDev = location.hostname === 'localhost' || location.hostname.startsWith('127.')
 const apiBaseUrl = isDev
   ? 'http://localhost:8080'
-  : 'https://lineapporderingsystem-production.up.railway.app'
+  : 'https://orderingsystem-production.up.railway.app'
 
 const step = ref(0)
 const menuData = ref([])

@@ -6,7 +6,7 @@ const isDev =
   location.hostname.startsWith("127.");
 const apiBaseUrl = isDev
   ? "http://localhost:8080"
-  : "https://lineapporderingsystem-production.up.railway.app";
+  : "https://orderingsystem-production.up.railway.app";
 
 const passwordInput = ref("");
 const authenticated = ref(localStorage.getItem("cozyAdminAuthed") === "true");
