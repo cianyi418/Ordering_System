@@ -447,11 +447,10 @@ def serve_vue_app(path):
         abort(400)
 
     file_path = os.path.join(app.static_folder, path)
-
     if os.path.isfile(file_path):
         return send_from_directory(app.static_folder, path)
-    
     return send_from_directory(app.static_folder, 'index.html')
+
 
 
 @handler.add(PostbackEvent)
