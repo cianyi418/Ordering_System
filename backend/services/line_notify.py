@@ -3,6 +3,7 @@ import logging
 import json
 from backend.config import LINE_CHANNEL_ACCESS_TOKEN
 
+
 def send_line_message(uid, message_type='text', content='Hello'):
     headers = {
         "Content-Type": "application/json",
@@ -15,55 +16,45 @@ def send_line_message(uid, message_type='text', content='Hello'):
             "text": content
         }
     elif message_type == 'flex':
+        # Remove altText and contents from content and keep the reference for later cleaning.
+        alt_text = content.get("altText", "📦 老宅私廚 訂單通知")
+        flex_content = content.get("contents")
+
         message = {
             "type": "flex",
-            "altText": content.get("altText", "📦 老宅私廚 訂單通知"),
-            "contents": content["contents"]
+            "altText": alt_text,
+            "contents": flex_content
         }
-    # check footer all button's uri
-        try:
-            footer_contents = message["contents"]["footer"]["contents"]
-            for btn in footer_contents:
-                action = btn.get("action", {})
-                uri = action.get("uri")
-                if uri and ';' in uri:
-                    uri_clean = uri.replace(';', '')
-                    logging.warning("🚨 URI 中含有非法分號，已移除：%s", uri_clean)
-                    action["uri"] = uri_clean
-        except Exception as e:
-            logging.warning("⚠️ 無法檢查 URI：%s", e)
     else:
         raise ValueError(f"Unsupported message type: {message_type}")
-    
 
     payload = {
         "to": uid,
         "messages": [message]
     }
 
-    def remove_semicolon_uri(obj):
+    # === URI security sanitization: recursively remove all semicolons ===
+    def clean_uri_recursively(obj):
         if isinstance(obj, dict):
             for k, v in obj.items():
-                if k == "uri" and isinstance(v, str) and ";" in v:
-                    print("移除分號前:", v)
-                    obj[k] = v.replace(";", "")
+                if k == "uri" and isinstance(v, str):
+                    if ";" in v:
+                        logging.warning("🚨 移除非法 URI 分號: %s", v)
+                        obj[k] = v.replace(";", "").strip()
                 else:
-                    remove_semicolon_uri(v)
+                    clean_uri_recursively(v)
         elif isinstance(obj, list):
             for item in obj:
-                remove_semicolon_uri(item)
+                clean_uri_recursively(item)
 
-    remove_semicolon_uri(payload)
+    clean_uri_recursively(payload)
 
-    print("=== 檢查移除分號後的 payload ===")
-    print(json.dumps(payload, ensure_ascii=False, indent=2))
-    print("footer uri:", payload["messages"][0]["contents"]["footer"]["contents"][0]["action"]["uri"])
-    print("型態:", type(payload["messages"][0]["contents"]["footer"]["contents"][0]["action"]["uri"]))
-
+    # === Debug Log ===
     logging.info("📤 準備推播：%s", payload)
-    print("=== 最終送出的 payload ===")
-    logging.info("=== 最終送出的 payload ===\n%s", json.dumps(payload, ensure_ascii=False, indent=2))
+    logging.info("📤 最終送出 payload:\n%s", json.dumps(payload, ensure_ascii=False, indent=2))
+    print("📤 LINE Payload:", json.dumps(payload, ensure_ascii=False, indent=2))
 
+    # === Send push ===
     try:
         response = requests.post(
             "https://api.line.me/v2/bot/message/push",
