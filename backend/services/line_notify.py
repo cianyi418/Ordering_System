@@ -41,6 +41,19 @@ def send_line_message(uid, message_type='text', content='Hello'):
         "messages": [message]
     }
 
+    def remove_semicolon_uri(obj):
+        if isinstance(obj, dict):
+            for k, v in obj.items():
+                if k == "uri" and isinstance(v, str) and ";" in v:
+                    obj[k] = v.replace(";", "")
+                else:
+                    remove_semicolon_uri(v)
+        elif isinstance(obj, list):
+            for item in obj:
+                remove_semicolon_uri(item)
+
+    remove_semicolon_uri(payload)
+
     logging.info("📤 準備推播：%s", payload)
     print("=== 最終送出的 payload ===")
     logging.info("=== 最終送出的 payload ===\n%s", json.dumps(payload, ensure_ascii=False, indent=2))
