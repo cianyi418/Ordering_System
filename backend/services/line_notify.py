@@ -40,7 +40,7 @@ def send_line_message(uid, message_type='text', content='Hello'):
 
     logging.info("📤 準備推播：%s", payload)
     print("=== 最終送出的 payload ===")
-    print(json.dumps(payload, ensure_ascii=False, indent=2))
+    logging.info("=== 最終送出的 payload ===\n%s", json.dumps(payload, ensure_ascii=False, indent=2))
 
     try:
         response = requests.post(
