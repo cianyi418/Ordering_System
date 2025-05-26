@@ -17,13 +17,10 @@ FLASK_ENV = os.getenv("FLASK_ENV", "development")
 ADMIN_PASSWORD = os.getenv("ADMIN_PASSWORD")
 NGROK_BASE_URL = os.getenv("NGROK_BASE_URL", "http://localhost:8080")
 
-raw_url = os.getenv("ORDER_DETAIL_BASE_URL", "http://localhost:8080")
-print("原始 ORDER_DETAIL_BASE_URL:", repr(raw_url))
-ORDER_DETAIL_BASE_URL = raw_url.rstrip(";/ ")
-print("處理後 ORDER_DETAIL_BASE_URL:", repr(ORDER_DETAIL_BASE_URL))
 
 # Remove illegal characters at the end (such as semicolons or extra slashes)
-#ORDER_DETAIL_BASE_URL = os.getenv("ORDER_DETAIL_BASE_URL", "http://localhost:8080").rstrip(";/ ")
+ORDER_DETAIL_BASE_URL = os.getenv("ORDER_DETAIL_BASE_URL", "http://localhost:8080")
+print("ORDER_DETAIL_BASE_URL 字元列表：", list(ORDER_DETAIL_BASE_URL))
 VITE_LIFF_ID = os.getenv("VITE_LIFF_ID", "default-liff-id")
 
 # === Write the front-end static/config.js to call Vue ===
