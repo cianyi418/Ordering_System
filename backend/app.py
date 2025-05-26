@@ -143,6 +143,9 @@ def order():
                 store_info = store_info,
                 order_time = order_time
             )
+
+            print("DEBUG: build_order_flex 組裝的 uri =", flex_content["contents"]["footer"]["contents"][0]["action"]["uri"])
+
             send_line_message(user_id, message_type='flex', content=flex_content)
             logging.info("✅ 訂單記錄成功：%s (%s)", order_id, user_id)
 

@@ -35,6 +35,7 @@ def build_order_flex(order_id, order_items, delivery, total, store_info='', orde
     order_time_str = order_time or datetime.now().strftime("%Y-%m-%d %H:%M")
 
     uri = f"{ORDER_DETAIL_BASE_URL}?order_id={order_id}"
+    print(f"DEBUG: 組裝的 uri = {uri}")
     
     bubble = {
         "type": "bubble",
