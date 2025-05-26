@@ -35,9 +35,11 @@
 
       <div class="text-sm flex justify-end mb-1">
         <span>付款狀態：</span>
-        <span :class="orderInfo['付款狀態'] === '已付款' || '貨到付款' ? 'text-green-600' : 'text-red-600'">
-          {{ orderInfo['付款狀態'] || '未付款' }}
-        </span>
+        <span
+        :class="['已付款', '貨到付款'].includes(orderInfo['付款狀態']) ? 'text-green-600' : 'text-red-600'"
+      >
+        {{ orderInfo['付款狀態'] || '未付款' }}
+      </span>
       </div>
       <div class="text-sm flex justify-end mb-1">
         <span>出貨狀態：</span>
