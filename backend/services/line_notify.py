@@ -20,18 +20,21 @@ def send_line_message(uid, message_type='text', content='Hello'):
             "altText": content.get("altText", "📦 老宅私廚 訂單通知"),
             "contents": content["contents"]
         }
-        # check if the message contains a URI in the footer
+    # check footer all button's uri
         try:
-            uri = message["contents"]["footer"]["contents"][0]["action"]["uri"]
-            print(f"🚨 檢查 URI：{uri}")
-            if ';' in uri:
-                uri_clean = uri.replace(';', '')
-                logging.warning("🚨 URI 中含有非法分號，已移除：%s", uri_clean)
-                message["contents"]["footer"]["contents"][0]["action"]["uri"] = uri_clean
+            footer_contents = message["contents"]["footer"]["contents"]
+            for btn in footer_contents:
+                action = btn.get("action", {})
+                uri = action.get("uri")
+                if uri and ';' in uri:
+                    uri_clean = uri.replace(';', '')
+                    logging.warning("🚨 URI 中含有非法分號，已移除：%s", uri_clean)
+                    action["uri"] = uri_clean
         except Exception as e:
             logging.warning("⚠️ 無法檢查 URI：%s", e)
     else:
         raise ValueError(f"Unsupported message type: {message_type}")
+    
 
     payload = {
         "to": uid,
