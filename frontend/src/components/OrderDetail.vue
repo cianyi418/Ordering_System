@@ -5,7 +5,9 @@
     <div v-else-if="!orderInfo">❗ 查無訂單資料</div>
     <div v-else class="text-gray-800">
       <p class="text-sm text-gray-600">訂單編號：{{ orderId }}</p>
-      <p class="text-sm text-gray-600 mb-4">下單時間：{{ orderInfo['訂購時間'] }}</p>
+      <p class="text-sm text-gray-600 mb-2">下單時間：{{ orderInfo['訂購時間'] }}</p>
+
+      <div class="border-t border-gray-300 my-2"></div>
 
       <h2 class="font-bold mb-2">商品明細：</h2>
       <table class="w-full text-sm mb-2">
@@ -17,25 +19,27 @@
         </tbody>
       </table>
 
-      <div class="flex justify-between text-sm mb-2">
+      <div class="flex justify-end text-sm mb-2">
         <span>商品小計：</span><span>${{ subtotal }}</span>
       </div>
-      <div class="flex justify-between text-sm mb-4">
+      <div class="flex justify-end text-sm text-gray-300 mb-4">
         <span>運費：</span><span>${{ shippingFee }}</span>
       </div>
+
+      <div class="border-t border-gray-300 my-2"></div>
 
       <p class="text-sm">取貨方式：{{ deliveryText }}</p>
       <p class="text-sm">門市資訊：{{ orderInfo['門市資訊'] }}</p>
       <p class="text-sm mb-2">備註：</p>
       <textarea disabled class="w-full p-2 border rounded bg-gray-50 text-sm mb-4">{{ orderInfo['備註'] || '-' }}</textarea>
 
-      <div class="text-sm flex justify-between mb-1">
+      <div class="text-sm flex justify-end mb-1">
         <span>付款狀態：</span>
         <span :class="orderInfo['付款狀態'] === '已付款' || '貨到付款' ? 'text-green-600' : 'text-red-600'">
           {{ orderInfo['付款狀態'] || '未付款' }}
         </span>
       </div>
-      <div class="text-sm flex justify-between mb-1">
+      <div class="text-sm flex justify-end mb-1">
         <span>出貨狀態：</span>
         <span :class="orderInfo['出貨狀態'] === '已出貨' ? 'text-green-600' : 'text-red-600'">
           {{ orderInfo['出貨狀態'] || '未出貨' }}
