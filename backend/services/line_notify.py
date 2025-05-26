@@ -45,6 +45,7 @@ def send_line_message(uid, message_type='text', content='Hello'):
         if isinstance(obj, dict):
             for k, v in obj.items():
                 if k == "uri" and isinstance(v, str) and ";" in v:
+                    print("移除分號前:", v)
                     obj[k] = v.replace(";", "")
                 else:
                     remove_semicolon_uri(v)
@@ -53,6 +54,11 @@ def send_line_message(uid, message_type='text', content='Hello'):
                 remove_semicolon_uri(item)
 
     remove_semicolon_uri(payload)
+
+    print("=== 檢查移除分號後的 payload ===")
+    print(json.dumps(payload, ensure_ascii=False, indent=2))
+    print("footer uri:", payload["messages"][0]["contents"]["footer"]["contents"][0]["action"]["uri"])
+    print("型態:", type(payload["messages"][0]["contents"]["footer"]["contents"][0]["action"]["uri"]))
 
     logging.info("📤 準備推播：%s", payload)
     print("=== 最終送出的 payload ===")
