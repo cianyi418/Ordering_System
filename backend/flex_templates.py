@@ -34,9 +34,11 @@ def build_order_flex(order_id, order_items, delivery, total, store_info='', orde
     shipping_fee = int(next((item['price'] for item in order_items if item['product'] == '運費'), 0))
     order_time_str = order_time or datetime.now().strftime("%Y-%m-%d %H:%M")
 
-    uri = f"{ORDER_DETAIL_BASE_URL}?order_id={order_id}"
-    uri = uri.replace(";", "") # remove any illegal semicolons
-    print(f"DEBUG: 組裝的 uri = {uri}")
+    uri = f"{ORDER_DETAIL_BASE_URL}?order_id={order_id}".rstrip(";/ ")
+    print("⚠️ DEBUG: BEFORE CLEAN:", uri)
+    uri = uri.replace(";", "").strip()
+    print("⚠️ DEBUG: AFTER CLEAN:", uri)
+
     
     bubble = {
         "type": "bubble",

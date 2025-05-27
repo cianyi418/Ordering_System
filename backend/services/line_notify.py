@@ -32,15 +32,19 @@ def send_line_message(uid, message_type='text', content='Hello'):
         "messages": [message]
     }
 
+    clean_uri_recursively(payload)
+
     # === Remove all uri semicolons in payload ===
     def clean_uri_recursively(obj):
         if isinstance(obj, dict):
             for k, v in obj.items():
                 if k == "uri" and isinstance(v, str):
-                    if ";" in v:
+                    cleaned = v.replace(";", "").replace("\n", "").strip()
+                    if cleaned != v:
                         logging.warning("🚨 移除非法 URI 分號: %s", v)
-                        obj[k] = v.replace(";", "").strip()
-                        print("✅ 已清理後的 URI:", obj[k])
+                        obj[k] = cleaned
+                        print("✅ 清理前 URI:", repr(v))
+                        print("✅ 清理後 URI:", repr(cleaned))
                 else:
                     clean_uri_recursively(v)
         elif isinstance(obj, list):
