@@ -19,9 +19,12 @@ NGROK_BASE_URL = os.getenv("NGROK_BASE_URL", "http://localhost:8080")
 
 
 # Remove illegal characters at the end (such as semicolons or extra slashes)
-ORDER_DETAIL_BASE_URL = os.getenv("ORDER_DETAIL_BASE_URL", "http://localhost:8080")
-print("ORDER_DETAIL_BASE_URL 字元列表：", list(ORDER_DETAIL_BASE_URL))
+ORDER_DETAIL_BASE_URL = os.getenv("ORDER_DETAIL_BASE_URL", "http://localhost:8080").rstrip(";/ ")
 VITE_LIFF_ID = os.getenv("VITE_LIFF_ID", "default-liff-id")
+
+# Optional debug print
+print("✅ ORDER_DETAIL_BASE_URL:", repr(ORDER_DETAIL_BASE_URL))
+print("✅ ORDER_DETAIL_BASE_URL 字元列表：", list(ORDER_DETAIL_BASE_URL))
 
 # === Write the front-end static/config.js to call Vue ===
 try:

@@ -16,7 +16,6 @@ def send_line_message(uid, message_type='text', content='Hello'):
             "text": content
         }
     elif message_type == 'flex':
-        # Remove altText and contents from content and keep the reference for later cleaning.
         alt_text = content.get("altText", "📦 老宅私廚 訂單通知")
         flex_content = content.get("contents")
 
@@ -33,7 +32,7 @@ def send_line_message(uid, message_type='text', content='Hello'):
         "messages": [message]
     }
 
-    # === URI security sanitization: recursively remove all semicolons ===
+    # === Remove all uri semicolons in payload ===
     def clean_uri_recursively(obj):
         if isinstance(obj, dict):
             for k, v in obj.items():
@@ -50,9 +49,8 @@ def send_line_message(uid, message_type='text', content='Hello'):
     clean_uri_recursively(payload)
 
     # === Debug Log ===
-    logging.info("📤 準備推播：%s", payload)
-    logging.info("📤 最終送出 payload:\n%s", json.dumps(payload, ensure_ascii=False, indent=2))
-    print("📤 LINE Payload:", json.dumps(payload, ensure_ascii=False, indent=2))
+    logging.info("📤 準備推播 Payload:\n%s", json.dumps(payload, ensure_ascii=False, indent=2))
+    print("📤 LINE Payload:\n", json.dumps(payload, ensure_ascii=False, indent=2))
 
     # === Send push ===
     try:
