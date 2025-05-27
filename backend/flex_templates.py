@@ -34,11 +34,10 @@ def build_order_flex(order_id, order_items, delivery, total, store_info='', orde
     shipping_fee = int(next((item['price'] for item in order_items if item['product'] == '運費'), 0))
     order_time_str = order_time or datetime.now().strftime("%Y-%m-%d %H:%M")
 
-    uri = f"{ORDER_DETAIL_BASE_URL}?order_id={order_id}".rstrip(";/ ")
-    print("⚠️ DEBUG: BEFORE CLEAN:", uri)
-    uri = uri.replace(";", "").strip()
-    print("⚠️ DEBUG: AFTER CLEAN:", uri)
-
+    uri = f"{ORDER_DETAIL_BASE_URL}?order_id={order_id}".strip()
+    uri = uri.replace(";", "").rstrip("/")
+    assert not uri.endswith(";"), f"❌ URI 含有非法分號: {uri}"
+    print("⚠️ DEBUG: 組裝後的 URI:", repr(uri))
     
     bubble = {
         "type": "bubble",
