@@ -1,9 +1,10 @@
 import requests
 import logging
 import json
+import copy
 from backend.config import LINE_CHANNEL_ACCESS_TOKEN
 
-# === Remove all uri semicolons in payload ===
+# === Remove illegal semicolons in uri ===
 def clean_uri_recursively(obj):
     if isinstance(obj, dict):
         for k, v in obj.items():
@@ -20,6 +21,7 @@ def clean_uri_recursively(obj):
         for item in obj:
             clean_uri_recursively(item)
 
+# === Send LINE Flex or Text message ===
 def send_line_message(uid, message_type='text', content='Hello'):
     headers = {
         "Content-Type": "application/json",
@@ -31,15 +33,17 @@ def send_line_message(uid, message_type='text', content='Hello'):
             "type": "text",
             "text": content
         }
+
     elif message_type == 'flex':
         alt_text = content.get("altText", "📦 老宅私廚 訂單通知")
-        flex_content = content.get("contents")
+        flex_content = copy.deepcopy(content.get("contents"))  # Deep copy to avoid contaminating the original Flex structure
 
         message = {
             "type": "flex",
             "altText": alt_text,
             "contents": flex_content
         }
+
     else:
         raise ValueError(f"Unsupported message type: {message_type}")
 
@@ -48,19 +52,11 @@ def send_line_message(uid, message_type='text', content='Hello'):
         "messages": [message]
     }
 
+    # Recursively clear illegal semicolons in uri
     clean_uri_recursively(payload)
 
-    # === Confirm whether there is really no semicolon after clearing ===
-    try:
-        footer_buttons = payload['messages'][0]['contents']['footer']['contents']
-        for btn in footer_buttons:
-            action = btn.get('action', {})
-            uri = action.get('uri')
-            if uri:
-                print("⚠️ 清理後的 URI:", repr(uri))
-    except Exception as e:
-        print("⚠️ 無法讀取 footer uri:", e)
-
+    # Fool-proof check: raise if there are still semicolons in the payload
+    assert ";" not in json.dumps(payload), "❌ payload 中仍含有非法分號 ';'"
 
     # === Debug Log ===
     logging.info("📤 準備推播 Payload:\n%s", json.dumps(payload, ensure_ascii=False, indent=2))
