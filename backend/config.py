@@ -3,6 +3,7 @@ import base64
 import json
 from dotenv import load_dotenv
 from flask import Flask
+from urllib.parse import urlparse
 
 # === Load .env only in development ===
 load_dotenv()
@@ -19,7 +20,14 @@ NGROK_BASE_URL = os.getenv("NGROK_BASE_URL", "http://localhost:8080")
 
 
 # Remove illegal characters at the end (such as semicolons or extra slashes)
-ORDER_DETAIL_BASE_URL = os.getenv("ORDER_DETAIL_BASE_URL", "http://localhost:8080").rstrip(";/ ")
+raw_url = os.getenv("ORDER_DETAIL_BASE_URL", "http://localhost:8080")
+ORDER_DETAIL_BASE_URL = raw_url.strip().replace(";", "").rstrip("/")
+
+# Make sure it is a legal full URL
+parsed_url = urlparse(ORDER_DETAIL_BASE_URL)
+if not parsed_url.scheme or not parsed_url.netloc:
+    raise ValueError(f"❌ ORDER_DETAIL_BASE_URL 非合法 URL: {ORDER_DETAIL_BASE_URL}")
+
 VITE_LIFF_ID = os.getenv("VITE_LIFF_ID", "default-liff-id")
 
 # Optional debug print
@@ -33,7 +41,7 @@ try:
     with open(config_path, "w", encoding="utf-8") as f:
         f.write(f'window.APP_CONFIG = {{\n'
                 f'  liffId: "{VITE_LIFF_ID}",\n'
-                f'  orderDetailBaseUrl: "{ORDER_DETAIL_BASE_URL}"\n'
+                f'  orderDetailBaseUrl: "{ORDER_DETAIL_BASE_URL.replace(";", "")}"\n'
                 f'}};')
     print("✅ static/config.js 已更新")
     print("✅ ORDER_DETAIL_BASE_URL:", repr(ORDER_DETAIL_BASE_URL))
