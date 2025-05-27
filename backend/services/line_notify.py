@@ -48,6 +48,18 @@ def send_line_message(uid, message_type='text', content='Hello'):
 
     clean_uri_recursively(payload)
 
+    # === Confirm whether there is really no semicolon after clearing ===
+    try:
+        footer_buttons = payload['messages'][0]['contents']['footer']['contents']
+        for btn in footer_buttons:
+            action = btn.get('action', {})
+            uri = action.get('uri')
+            if uri:
+                print("⚠️ 清理後的 URI:", repr(uri))
+    except Exception as e:
+        print("⚠️ 無法讀取 footer uri:", e)
+
+
     # === Debug Log ===
     logging.info("📤 準備推播 Payload:\n%s", json.dumps(payload, ensure_ascii=False, indent=2))
     print("📤 LINE Payload:\n", json.dumps(payload, ensure_ascii=False, indent=2))
