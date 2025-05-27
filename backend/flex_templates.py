@@ -37,7 +37,7 @@ def build_order_flex(order_id, order_items, delivery, total, store_info='', orde
     uri = f"{ORDER_DETAIL_BASE_URL}?order_id={order_id}".strip()
     uri = uri.replace(";", "").rstrip("/")
     assert not uri.endswith(";"), f"❌ URI 含有非法分號: {uri}"
-    print("⚠️ DEBUG: 組裝後的 URI:", repr(uri))
+    print("⚠️ 最終 uri (build_order_flex return 前):", repr(uri))
     
     bubble = {
         "type": "bubble",

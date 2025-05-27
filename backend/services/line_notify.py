@@ -55,8 +55,27 @@ def send_line_message(uid, message_type='text', content='Hello'):
     # Recursively clear illegal semicolons in uri
     clean_uri_recursively(payload)
 
+    # [Optional] Debug all URI values ​​(make sure there are no remaining）
+    try:
+        def print_all_uris(obj):
+            if isinstance(obj, dict):
+                for k, v in obj.items():
+                    if k == "uri" and isinstance(v, str):
+                        print("🔍 檢查 URI:", repr(v))
+                    else:
+                        print_all_uris(v)
+            elif isinstance(obj, list):
+                for item in obj:
+                    print_all_uris(item)
+
+        print_all_uris(payload)
+    except Exception as e:
+        print("⚠️ URI 檢查錯誤:", e)
+
+
     # Fool-proof check: raise if there are still semicolons in the payload
-    assert ";" not in json.dumps(payload), "❌ payload 中仍含有非法分號 ';'"
+    if ";" in json.dumps(payload):
+        raise ValueError("❌ Payload 中仍含有非法分號 ';'，請檢查 URI 組裝與清理流程")
 
     # === Debug Log ===
     logging.info("📤 準備推播 Payload:\n%s", json.dumps(payload, ensure_ascii=False, indent=2))
