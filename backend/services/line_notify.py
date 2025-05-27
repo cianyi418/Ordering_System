@@ -40,13 +40,12 @@ def send_line_message(uid, message_type='text', content='Hello'):
                     if ";" in v:
                         logging.warning("🚨 移除非法 URI 分號: %s", v)
                         obj[k] = v.replace(";", "").strip()
+                        print("✅ 已清理後的 URI:", obj[k])
                 else:
                     clean_uri_recursively(v)
         elif isinstance(obj, list):
             for item in obj:
                 clean_uri_recursively(item)
-
-    clean_uri_recursively(payload)
 
     # === Confirm whether there is really no semicolon after clearing ===
     try:
