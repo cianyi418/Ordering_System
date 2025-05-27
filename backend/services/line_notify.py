@@ -3,6 +3,22 @@ import logging
 import json
 from backend.config import LINE_CHANNEL_ACCESS_TOKEN
 
+# === Remove all uri semicolons in payload ===
+def clean_uri_recursively(obj):
+    if isinstance(obj, dict):
+        for k, v in obj.items():
+            if k == "uri" and isinstance(v, str):
+                cleaned = v.replace(";", "").replace("\n", "").strip()
+                if cleaned != v:
+                    logging.warning("🚨 移除非法 URI 分號: %s", v)
+                    obj[k] = cleaned
+                    print("✅ 清理前 URI:", repr(v))
+                    print("✅ 清理後 URI:", repr(cleaned))
+            else:
+                clean_uri_recursively(v)
+    elif isinstance(obj, list):
+        for item in obj:
+            clean_uri_recursively(item)
 
 def send_line_message(uid, message_type='text', content='Hello'):
     headers = {
@@ -33,23 +49,6 @@ def send_line_message(uid, message_type='text', content='Hello'):
     }
 
     clean_uri_recursively(payload)
-
-    # === Remove all uri semicolons in payload ===
-    def clean_uri_recursively(obj):
-        if isinstance(obj, dict):
-            for k, v in obj.items():
-                if k == "uri" and isinstance(v, str):
-                    cleaned = v.replace(";", "").replace("\n", "").strip()
-                    if cleaned != v:
-                        logging.warning("🚨 移除非法 URI 分號: %s", v)
-                        obj[k] = cleaned
-                        print("✅ 清理前 URI:", repr(v))
-                        print("✅ 清理後 URI:", repr(cleaned))
-                else:
-                    clean_uri_recursively(v)
-        elif isinstance(obj, list):
-            for item in obj:
-                clean_uri_recursively(item)
 
     # === Confirm whether there is really no semicolon after clearing ===
     try:
