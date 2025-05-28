@@ -18,10 +18,14 @@ FLASK_ENV = os.getenv("FLASK_ENV", "development")
 ADMIN_PASSWORD = os.getenv("ADMIN_PASSWORD")
 NGROK_BASE_URL = os.getenv("NGROK_BASE_URL", "http://localhost:8080")
 
+print("DEBUG: os.getenv('ORDER_DETAIL_BASE_URL') =", repr(os.getenv("ORDER_DETAIL_BASE_URL")))
+
 
 # Remove illegal characters at the end (such as semicolons or extra slashes)
 raw_url = os.getenv("ORDER_DETAIL_BASE_URL", "http://localhost:8080")
+print("DEBUG: raw_url =", repr(raw_url))
 ORDER_DETAIL_BASE_URL = raw_url.strip().replace(";", "").rstrip("/")
+print("DEBUG: ORDER_DETAIL_BASE_URL after processing =", repr(ORDER_DETAIL_BASE_URL))
 
 # Make sure it is a legal full URL
 parsed_url = urlparse(ORDER_DETAIL_BASE_URL)
