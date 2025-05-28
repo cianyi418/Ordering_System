@@ -35,12 +35,8 @@ def build_order_flex(order_id, order_items, delivery, total, store_info='', orde
     order_time_str = order_time or datetime.now().strftime("%Y-%m-%d %H:%M")
 
     uri = f"{ORDER_DETAIL_BASE_URL}?order_id={order_id}".strip()
-    print("DEBUG: 組裝後的 URI =", repr(uri))
     uri = uri.replace(";", "").rstrip("/")
-    print("DEBUG: 清理分號後的 URI =", repr(uri))
     assert not uri.endswith(";"), f"❌ URI 含有非法分號: {uri}"
-    print("⚠️ 最終 uri (build_order_flex return 前):", repr(uri))
-    print("DEBUG: final uri 字元列表：", list(uri))
     
     bubble = {
         "type": "bubble",
