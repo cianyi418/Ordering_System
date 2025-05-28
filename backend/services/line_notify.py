@@ -15,6 +15,8 @@ def clean_uri_recursively(obj):
                     obj[k] = cleaned
                     print("✅ 清理前 URI:", repr(v))
                     print("✅ 清理後 URI:", repr(cleaned))
+                else:
+                    print("✅ URI 無需清理:", repr(v))
             else:
                 print(f"DEBUG: 遞迴處理 dict 的 key: {k}")
                 clean_uri_recursively(v)
@@ -27,7 +29,7 @@ def clean_uri_recursively(obj):
 def send_line_message(uid, message_type='text', content='Hello'):
     headers = {
         "Content-Type": "application/json",
-        "Authorization": f"Bearer {LINE_CHANNEL_ACCESS_TOKEN}"
+        "Authorization": "fBearer {LINE_CHANNEL_ACCESS_TOKEN}"
     }
 
     if message_type == 'text':
@@ -55,35 +57,18 @@ def send_line_message(uid, message_type='text', content='Hello'):
         "messages": [message]
     }
 
+    # Debug payload before cleaning
+    print("DEBUG: 清理前的 payload =", json.dumps(payload, ensure_ascii=False, indent=2))
+
     # Recursively clear illegal semicolons in uri
     clean_uri_recursively(payload)
-    print("DEBUG: 清理與檢查後的 payload =", json.dumps(payload, ensure_ascii=False, indent=2))
 
-    # [Optional] Debug all URI values ​​(make sure there are no remaining）
-    try:
-        def print_all_uris(obj):
-            if isinstance(obj, dict):
-                for k, v in obj.items():
-                    if k == "uri" and isinstance(v, str):
-                        print("🔍 檢查 URI:", repr(v))
-                    else:
-                        print_all_uris(v)
-            elif isinstance(obj, list):
-                for item in obj:
-                    print_all_uris(item)
-
-        print_all_uris(payload)
-    except Exception as e:
-        print("⚠️ URI 檢查錯誤:", e)
-
+    # Debug payload after cleaning
+    print("DEBUG: 清理後的 payload =", json.dumps(payload, ensure_ascii=False, indent=2))
 
     # Fool-proof check: raise if there are still semicolons in the payload
     if ";" in json.dumps(payload):
         raise ValueError("❌ Payload 中仍含有非法分號 ';'，請檢查 URI 組裝與清理流程")
-
-    # === Debug Log ===
-    logging.info("📤 準備推播 Payload:\n%s", json.dumps(payload, ensure_ascii=False, indent=2))
-    print("📤 LINE Payload:\n", json.dumps(payload, ensure_ascii=False, indent=2))
 
     # === Send push ===
     try:
