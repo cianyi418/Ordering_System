@@ -29,7 +29,7 @@ def clean_uri_recursively(obj):
 def send_line_message(uid, message_type='text', content='Hello'):
     headers = {
         "Content-Type": "application/json",
-        "Authorization": "fBearer {LINE_CHANNEL_ACCESS_TOKEN}"
+        "Authorization": f"Bearer {LINE_CHANNEL_ACCESS_TOKEN}"
     }
 
     if message_type == 'text':
