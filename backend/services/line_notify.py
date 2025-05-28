@@ -16,9 +16,11 @@ def clean_uri_recursively(obj):
                     print("✅ 清理前 URI:", repr(v))
                     print("✅ 清理後 URI:", repr(cleaned))
             else:
+                print(f"DEBUG: 遞迴處理 dict 的 key: {k}")
                 clean_uri_recursively(v)
     elif isinstance(obj, list):
         for item in obj:
+            print("DEBUG: 遞迴處理 list 的 item")
             clean_uri_recursively(item)
 
 # === Send LINE Flex or Text message ===
@@ -43,6 +45,7 @@ def send_line_message(uid, message_type='text', content='Hello'):
             "altText": alt_text,
             "contents": flex_content
         }
+        print("DEBUG: 深拷貝後的 flex_content =", json.dumps(flex_content, ensure_ascii=False, indent=2))
 
     else:
         raise ValueError(f"Unsupported message type: {message_type}")
@@ -54,6 +57,7 @@ def send_line_message(uid, message_type='text', content='Hello'):
 
     # Recursively clear illegal semicolons in uri
     clean_uri_recursively(payload)
+    print("DEBUG: 清理與檢查後的 payload =", json.dumps(payload, ensure_ascii=False, indent=2))
 
     # [Optional] Debug all URI values ​​(make sure there are no remaining）
     try:
@@ -90,7 +94,14 @@ def send_line_message(uid, message_type='text', content='Hello'):
         )
 
         print(f"📤 LINE 推播結果：{response.status_code}")
-        print(response.text)
+        print("DEBUG: LINE API 回應 headers =", response.headers)
+        print("DEBUG: LINE API 回應 body =", response.text)
+
+        try:
+            response_json = response.json()
+            print("DEBUG: LINE API 回應 JSON =", json.dumps(response_json, ensure_ascii=False, indent=2))
+        except ValueError:
+            print("DEBUG: LINE API 回應非 JSON 格式")
 
         if response.status_code != 200:
             logging.error("❌ 推播失敗：%s %s", response.status_code, response.text)
@@ -101,4 +112,5 @@ def send_line_message(uid, message_type='text', content='Hello'):
 
     except Exception as e:
         logging.exception("❗ 推播時發生例外錯誤")
+        print("DEBUG: 推播例外錯誤 =", str(e))
         return 500, str(e)
