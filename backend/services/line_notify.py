@@ -68,6 +68,7 @@ def send_line_message(uid, message_type='text', content='Hello'):
 
     # Fool-proof check: raise if there are still semicolons in the payload
     if ";" in json.dumps(payload):
+        print("DEBUG: Payload 中仍含有非法分號")
         raise ValueError("❌ Payload 中仍含有非法分號 ';'，請檢查 URI 組裝與清理流程")
 
     # === Send push ===
