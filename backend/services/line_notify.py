@@ -27,11 +27,6 @@ def clean_uri_recursively(obj):
 
 # === Send LINE Flex or Text message ===
 def send_line_message(uid, message_type='text', content='Hello'):
-    headers = {
-        "Content-Type": "application/json",
-        "Authorization": f"Bearer {LINE_CHANNEL_ACCESS_TOKEN}"
-    }
-
     if message_type == 'text':
         message = {
             "type": "text",
@@ -75,8 +70,10 @@ def send_line_message(uid, message_type='text', content='Hello'):
     try:
         response = requests.post(
             "https://api.line.me/v2/bot/message/push",
-            headers=headers,
-            json=json.dump(payload)
+            headers = {
+                "Authorization": f"Bearer {LINE_CHANNEL_ACCESS_TOKEN}"
+                },
+            json = payload
         )
 
         print(f"📤 LINE 推播結果：{response.status_code}")

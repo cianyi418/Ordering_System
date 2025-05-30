@@ -153,7 +153,7 @@ def order():
             logging.warning("❗ 推播失敗：%s", repr(push_err))
 
         logging.info("✅ 訂單記錄成功：%s", order_id)
-        logging.info("📤 傳送 Flex 推播內容: %s", flex_content)
+        logging.info("📤 傳送 Flex 推播內容: %s", json.dumps(flex_content, ensure_ascii=False))
         return jsonify({'status': 'success', 'message': '訂單已記錄', 'order_id': order_id})
 
     except Exception as e:
