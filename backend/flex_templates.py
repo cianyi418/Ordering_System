@@ -1,3 +1,4 @@
+import json
 from datetime import datetime
 from backend.config import ORDER_DETAIL_BASE_URL
 
@@ -100,6 +101,9 @@ def build_order_flex(order_id, order_items, delivery, total, store_info='', orde
             ]
         }
     }
+
+    print("DEBUG: 訂單通知 Flex Bubble =", json.dumps( bubble, ensure_ascii=False))
+    print("DEBUG: 訂單通知 Flex Bubble =", json.dumps( bubble, ensure_ascii=True))
 
     return {
         "altText": f"訂單成立通知：{order_id}",
