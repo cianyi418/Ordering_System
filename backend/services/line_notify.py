@@ -76,7 +76,7 @@ def send_line_message(uid, message_type='text', content='Hello'):
         response = requests.post(
             "https://api.line.me/v2/bot/message/push",
             headers=headers,
-            json=payload
+            json=json.dump(payload)
         )
 
         print(f"📤 LINE 推播結果：{response.status_code}")
