@@ -37,12 +37,10 @@ def build_order_flex(order_id, order_items, delivery, total, store_info='', orde
     order_time_str = order_time or datetime.now().strftime("%Y-%m-%d %H:%M")
 
     uri = f"{ORDER_DETAIL_BASE_URL}?order_id={order_id}".strip()
-    uri = uri.replace(";", "").rstrip("/")
-    assert not uri.endswith(";"), f"❌ URI 含有非法分號: {uri}"
-    
-    # Ensure the uri is safe for JSON serialization (escape special characters)
-
     safe_uri = quote(uri, safe=":/?=&")  # keep URL structure, escape others
+    safe_uri = safe_uri.replace(";", "").rstrip("/")
+    assert not safe_uri.endswith(";"), f"❌ URI 含有非法分號: {safe_uri}"
+    print("DEBUG: 安全的 URI =", safe_uri)
 
     bubble = {
         "type": "bubble",
@@ -107,7 +105,7 @@ def build_order_flex(order_id, order_items, delivery, total, store_info='', orde
         }
     }
 
-    print("DEBUG: 訂單通知 Flex Bubble =", json.dumps( bubble, ensure_ascii=False))
+    print("DEBUG: 訂單通知 Flex Bubble =", json.dumps(bubble, ensure_ascii=False))
 
     return {
         "altText": f"訂單成立通知：{order_id}",

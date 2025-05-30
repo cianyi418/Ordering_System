@@ -42,7 +42,6 @@ def send_line_message(uid, message_type='text', content='Hello'):
             "altText": alt_text,
             "contents": flex_content
         }
-        print("DEBUG: 深拷貝後的 flex_content =", json.dumps(flex_content, ensure_ascii=False, indent=2))
 
     else:
         raise ValueError(f"Unsupported message type: {message_type}")
@@ -53,16 +52,16 @@ def send_line_message(uid, message_type='text', content='Hello'):
     }
 
     # Debug payload before cleaning
-    print("DEBUG: 清理前的 payload =", json.dumps(payload, ensure_ascii=False, indent=2))
+    # print("DEBUG: 清理前的 payload =", json.dumps(payload, ensure_ascii=False))
 
     # Recursively clear illegal semicolons in uri
-    clean_uri_recursively(payload)
+    # clean_uri_recursively(payload)
 
     # Debug payload after cleaning
-    print("DEBUG: 清理後的 payload =", json.dumps(payload, ensure_ascii=False, indent=2))
+    # print("DEBUG: 清理後的 payload =", json.dumps(payload, ensure_ascii=False))
 
     # Fool-proof check: raise if there are still semicolons in the payload
-    if ";" in json.dumps(payload):
+    if ";" in json.dumps(payload, ensure_ascii=False):
         print("DEBUG: Payload 中仍含有非法分號")
         raise ValueError("❌ Payload 中仍含有非法分號 ';'，請檢查 URI 組裝與清理流程")
 
@@ -82,7 +81,7 @@ def send_line_message(uid, message_type='text', content='Hello'):
 
         try:
             response_json = response.json()
-            print("DEBUG: LINE API 回應 JSON =", json.dumps(response_json, ensure_ascii=False, indent=2))
+            print("DEBUG: LINE API 回應 JSON =", json.dumps(response_json, ensure_ascii=False))
         except ValueError:
             print("DEBUG: LINE API 回應非 JSON 格式")
 
