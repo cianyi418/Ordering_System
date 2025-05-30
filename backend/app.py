@@ -14,7 +14,8 @@ from linebot import LineBotApi, WebhookHandler
 from linebot.exceptions import InvalidSignatureError
 from linebot.models import MessageEvent, TextMessage, TextSendMessage, PostbackEvent
 
-
+import sys
+print(f"DEBUG: Python version = {sys.version}")
 # Load environment variables
 #FLASK_ENV = os.getenv('FLASK_ENV', 'production')
 
@@ -294,7 +295,7 @@ def add_menu_item():
             return jsonify({'status': 'error', 'message': '商品已存在'}), 409
         menu.append({'name': data['name'], 'price': data['price']})
         f.seek(0)
-        json.dump(menu, f, ensure_ascii=False, indent=2)
+        json.dump(menu, f, ensure_ascii=False)
         f.truncate()
     return jsonify({'status': 'success', 'message': f"{data['name']} 已上架"})
 
@@ -314,7 +315,7 @@ def remove_menu_item():
         if len(updated) == len(menu):
             return jsonify({'status': 'error', 'message': '商品不存在'}), 404
         f.seek(0)
-        json.dump(updated, f, ensure_ascii=False, indent=2)
+        json.dump(updated, f, ensure_ascii=False)
         f.truncate()
     return jsonify({'status': 'success', 'message': f"{data['name']} 已下架"})
 
@@ -344,7 +345,7 @@ def default_rules():
 def load_shipping_rules():
     if not os.path.exists(RULES_FILE):
         with open(RULES_FILE, 'w', encoding='utf-8') as f:
-            json.dump(default_rules(), f, ensure_ascii=False, indent=2)
+            json.dump(default_rules(), f, ensure_ascii=False)
     with open(RULES_FILE, 'r', encoding='utf-8') as f:
         return json.load(f)
 
@@ -373,7 +374,7 @@ def update_shipping_rules():
     try:
         new_rules = request.get_json()
         with open(RULES_FILE, 'w', encoding='utf-8') as f:
-            json.dump(new_rules, f, ensure_ascii=False, indent=2)
+            json.dump(new_rules, f, ensure_ascii=False)
         return jsonify({'status': 'success', 'message': '運費設定已更新'})
     except Exception as e:
         return jsonify({'status': 'error', 'message': str(e)}), 500
