@@ -18,11 +18,11 @@ def clean_uri_recursively(obj):
                 else:
                     print("✅ URI 無需清理:", repr(v))
             else:
-                print(f"DEBUG: 遞迴處理 dict 的 key: {k}")
+                # print(f"DEBUG: 遞迴處理 dict 的 key: {k}")
                 clean_uri_recursively(v)
     elif isinstance(obj, list):
         for item in obj:
-            print("DEBUG: 遞迴處理 list 的 item")
+            # print("DEBUG: 遞迴處理 list 的 item")
             clean_uri_recursively(item)
 
 # === Send LINE Flex or Text message ===
