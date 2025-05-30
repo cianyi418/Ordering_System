@@ -85,7 +85,7 @@ def build_order_flex(order_id, order_items, delivery, total, store_info='', orde
                     "action": {
                         "type": "uri",
                         "label": "查看訂單明細",
-                        "uri": "https://liff.line.me".strip().replace(";", "")
+                        "uri": "https://liff.line.me"
                     }
                 },
                 {
@@ -102,8 +102,7 @@ def build_order_flex(order_id, order_items, delivery, total, store_info='', orde
         }
     }
 
-    print("DEBUG: 訂單通知 Flex Bubble =", json.dumps( bubble, ensure_ascii=False))
-    print("DEBUG: 訂單通知 Flex Bubble =", json.dumps( bubble, ensure_ascii=True))
+    print("DEBUG: 訂單通知 Flex Bubble =", json.dumps( bubble, ensure_ascii=False, indent=2))
 
     return {
         "altText": f"訂單成立通知：{order_id}",
