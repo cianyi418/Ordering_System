@@ -1,6 +1,7 @@
 import json
 from datetime import datetime
 from backend.config import ORDER_DETAIL_BASE_URL
+from urllib.parse import quote
 
 def build_order_flex(order_id, order_items, delivery, total, store_info='', order_time=None):
     max_display = 5
@@ -39,6 +40,10 @@ def build_order_flex(order_id, order_items, delivery, total, store_info='', orde
     uri = uri.replace(";", "").rstrip("/")
     assert not uri.endswith(";"), f"❌ URI 含有非法分號: {uri}"
     
+    # Ensure the uri is safe for JSON serialization (escape special characters)
+
+    safe_uri = quote(uri, safe=":/?=&")  # keep URL structure, escape others
+
     bubble = {
         "type": "bubble",
         "size": "mega",
@@ -85,7 +90,7 @@ def build_order_flex(order_id, order_items, delivery, total, store_info='', orde
                     "action": {
                         "type": "uri",
                         "label": "查看訂單明細",
-                        "uri": "https://liff.line.me"
+                        "uri": safe_uri
                     }
                 },
                 {
@@ -102,7 +107,7 @@ def build_order_flex(order_id, order_items, delivery, total, store_info='', orde
         }
     }
 
-    print("DEBUG: 訂單通知 Flex Bubble =", json.dumps( bubble, ensure_ascii=False, indent=2))
+    print("DEBUG: 訂單通知 Flex Bubble =", json.dumps( bubble, ensure_ascii=False))
 
     return {
         "altText": f"訂單成立通知：{order_id}",
