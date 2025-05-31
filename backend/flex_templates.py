@@ -37,8 +37,7 @@ def build_order_flex(order_id, order_items, delivery, total, store_info='', orde
     order_time_str = order_time or datetime.now().strftime("%Y-%m-%d %H:%M")
 
     uri = f"{ORDER_DETAIL_BASE_URL}?order_id={order_id}".strip()
-    safe_uri = quote(uri, safe=":/?=&").replace(";", "").rstrip("/") # keep URL structure, escape others
-    print("DEBUG: 安全的 URI =", safe_uri)
+    safe_uri = quote(uri, safe=":/?=&", encoding="utf-8").replace(";", "").rstrip("/") # keep URL structure, escape others
 
     bubble = {
         "type": "bubble",
@@ -86,8 +85,7 @@ def build_order_flex(order_id, order_items, delivery, total, store_info='', orde
                     "action": {
                         "type": "uri",
                         "label": "查看訂單明細",
-                        "uri": 'https',
-                        "dummy":"toavoidsemicolon"
+                        "uri": safe_uri
                     }
                 },
                 {
