@@ -31,7 +31,7 @@ def default_rules():
 # Make sure the file exists
 if not os.path.exists(RULES_FILE):
     with open(RULES_FILE, 'w', encoding='utf-8') as f:
-        json.dump(default_rules(), f, ensure_ascii=False, indent=2)
+        json.dump(default_rules(), f, ensure_ascii=False)
 
 @app.route('/shipping-rules', methods=['GET'])
 def get_shipping_rules():
@@ -44,7 +44,7 @@ def update_shipping_rules():
     try:
         rules = request.get_json()
         with open(RULES_FILE, 'w', encoding='utf-8') as f:
-            json.dump(rules, f, ensure_ascii=False, indent=2)
+            json.dump(rules, f, ensure_ascii=False)
         return jsonify({'status': 'success', 'message': '運費規則已更新'})
     except Exception as e:
         return jsonify({'status': 'error', 'message': str(e)}), 500
