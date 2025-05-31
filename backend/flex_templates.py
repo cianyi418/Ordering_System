@@ -86,7 +86,7 @@ def build_order_flex(order_id, order_items, delivery, total, store_info='', orde
                     "action": {
                         "type": "uri",
                         "label": "查看訂單明細",
-                        "uri": str(safe_uri)
+                        "uri": f'{str(safe_uri)}'
                     }
                 },
                 {
