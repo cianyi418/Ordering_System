@@ -1,7 +1,7 @@
 import json
 from datetime import datetime
 from backend.config import ORDER_DETAIL_BASE_URL
-from urllib.parse import quote
+from urllib.parse import quote, urlencode, urljoin
 
 def build_order_flex(order_id, order_items, delivery, total, store_info='', order_time=None):
     max_display = 5
@@ -36,8 +36,10 @@ def build_order_flex(order_id, order_items, delivery, total, store_info='', orde
     shipping_fee = int(next((item['price'] for item in order_items if item['product'] == '運費'), 0))
     order_time_str = order_time or datetime.now().strftime("%Y-%m-%d %H:%M")
 
-    uri = f"{ORDER_DETAIL_BASE_URL}?order_id={order_id}".strip()
-    safe_uri = quote(uri, safe=":/?=&", encoding="utf-8").replace(";", "").rstrip("/") # keep URL structure, escape others
+    # Safely encode query parameters
+    query_params = {"order_id": order_id}
+    safe_uri = urljoin(ORDER_DETAIL_BASE_URL, f"?{urlencode(query_params)}")
+    print(f"DEBUG: Safe URI = {safe_uri}")
 
     bubble = {
         "type": "bubble",
