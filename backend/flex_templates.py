@@ -104,7 +104,31 @@ def build_order_flex(order_id, order_items, delivery, total, store_info='', orde
         }
     }
 
-    print("DEBUG: 訂單通知 Flex Bubble =", json.dumps(bubble, ensure_ascii=False))
+    # Clean all URI fields in the bubble object
+    def clean_uri_fields(obj):
+        if isinstance(obj, dict):
+            for key, value in obj.items():
+                if key == "uri" and isinstance(value, str):
+                    obj[key] = value.strip().rstrip(";")
+                elif isinstance(value, (dict, list)):
+                    clean_uri_fields(value)
+        elif isinstance(obj, list):
+            for item in obj:
+                clean_uri_fields(item)
+        return obj
+    
+    bubble = clean_uri_fields(bubble)
+    
+    # Serialize to JSON
+    json_str = json.dumps(bubble, ensure_ascii=False)
+    
+    # Final safety check - clean any URI patterns with trailing semicolons
+    json_str = json_str.replace('"uri":"', '"uri":"').replace('";', '",')
+    
+    print(f"DEBUG: 訂單通知 Flex Bubble = {json_str}")
+    
+    # Load back the cleaned JSON
+    bubble = json.loads(json_str)
 
     return {
         "altText": f"訂單成立通知：{order_id}",
