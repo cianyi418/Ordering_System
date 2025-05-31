@@ -124,7 +124,7 @@ def build_order_flex(order_id, order_items, delivery, total, store_info='', orde
     print(f"DEBUG: json_str = {json_str}")
 
     # Final safety check - clean any URI patterns with trailing semicolons
-    json_str = json_str.replace('"uri":"', '"uri":"').replace('";', '",')
+    json_str = json_str.replace(';', '')
 
     print(f"DEBUG: 訂單通知 Flex Bubble = {json_str}")
     
