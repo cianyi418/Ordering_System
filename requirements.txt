@@ -19,7 +19,7 @@ idna==3.10
 importlib_metadata==8.7.0
 itsdangerous==2.2.0
 Jinja2==3.1.6
-json=2.0.9
+json==2.0.9
 line-bot-sdk==3.17.1
 MarkupSafe==3.0.2
 multidict==6.4.4
