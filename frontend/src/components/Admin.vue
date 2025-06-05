@@ -263,15 +263,21 @@ onMounted(() => {
 
       <!-- 訂單管理 -->
       <div v-if="view === 'orders'">
+        <div class="mb-2 flex gap-4 items-center">
         <!-- 篩選條件 -->
-        <div class="mb-4 flex gap-4 justify-end">
-          <select v-model="filterPayment" class="px-2 py-1 border rounded">
+          <input
+            v-model="search"
+            type="text"
+            placeholder="搜尋 ID 或訂單編號"
+            class="px-3 py-2 border rounded w-full h-10"
+          />
+          <select v-model="filterPayment" class="px-2 py-1 border rounded h-10">
             <option value="所有付款狀態">所有付款狀態</option>
             <option v-for="option in paymentOptions" :key="option" :value="option">
               {{ option }}
             </option>
           </select>
-          <select v-model="filterShipping" class="px-2 py-1 border rounded">
+          <select v-model="filterShipping" class="px-2 py-1 border rounded h-10">
             <option value="所有出貨狀態">所有出貨狀態</option>
             <option v-for="option in shippingOptions" :key="option" :value="option">
               {{ option }}
