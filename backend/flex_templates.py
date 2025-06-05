@@ -48,7 +48,7 @@ def build_order_flex(order_id, order_items, delivery, total, store_info='', orde
             "type": "box",
             "layout": "vertical",
             "contents": [
-                {"type": "text", "text": "🧾 老宅私廚 訂單成立", "weight": "bold", "size": "md", "color": "#1DB446"},
+                {"type": "text", "text": "🧾 Cozy Eats 訂單成立", "weight": "bold", "size": "md", "color": "#1DB446"},
                 {"type": "text", "text": f"訂單編號：{order_id}", "size": "xs", "color": "#999999"},
                 {"type": "text", "text": f"下單時間：{order_time_str}", "size": "xs", "color": "#999999"}
             ]
