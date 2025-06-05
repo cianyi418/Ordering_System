@@ -23,8 +23,8 @@ const shippingRules = ref({
   "face_to_face": [{ regions: "", free_shipping_min: 0 }]
 });
 
-const shippingOptions = ["未出貨", "已出貨"];
-const paymentOptions = ["未付款", "已付款"];
+const shippingOptions = ["未出貨", "已出貨", "取消"];
+const paymentOptions = ["未付款", "已付款", "貨到付款"];
 
 const filteredOrders = computed(() => {
   return orders.value.filter((order) => {
@@ -263,6 +263,22 @@ onMounted(() => {
 
       <!-- 訂單管理 -->
       <div v-if="view === 'orders'">
+        <!-- 篩選條件 -->
+        <div class="mb-4 flex gap-4 justify-end">
+          <select v-model="filterPayment" class="px-2 py-1 border rounded">
+            <option value="所有付款狀態">所有付款狀態</option>
+            <option v-for="option in paymentOptions" :key="option" :value="option">
+              {{ option }}
+            </option>
+          </select>
+          <select v-model="filterShipping" class="px-2 py-1 border rounded">
+            <option value="所有出貨狀態">所有出貨狀態</option>
+            <option v-for="option in shippingOptions" :key="option" :value="option">
+              {{ option }}
+            </option>
+          </select>
+        </div>
+
         <div v-for="(orderItems, orderId) in groupedOrders" :key="orderId" class="mb-4">
           <div v-if="orderItems && orderItems.length" class="bg-white rounded shadow p-4">
             <!-- 訂單標題 -->
