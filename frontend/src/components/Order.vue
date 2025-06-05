@@ -330,7 +330,7 @@ onMounted(async () => {
     </div>
 
     <template v-if="step === 0">
-      <h1 class="text-2xl font-bold mb-4 w-full text-center">老宅私廚</h1>
+      <h1 class="text-2xl font-bold mb-4 w-full text-center">Cozy Eats</h1>
       <h2 class="text-xl font-bold mb-2">選擇商品</h2>
       <p class="text-sm text-gray-500 mb-2">水餃 1包/ 30入</p>
       <div v-for="item in menuData" :key="item.name" class="mb-2">
