@@ -14,8 +14,6 @@ from linebot import LineBotApi, WebhookHandler
 from linebot.exceptions import InvalidSignatureError
 from linebot.models import MessageEvent, TextMessage, TextSendMessage, PostbackEvent
 
-import sys
-print(f"DEBUG: Python version = {sys.version}")
 # Load environment variables
 #FLASK_ENV = os.getenv('FLASK_ENV', 'production')
 

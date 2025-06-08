@@ -39,7 +39,6 @@ def build_order_flex(order_id, order_items, delivery, total, store_info='', orde
     # Safely encode query parameters
     query_params = {"order_id": order_id}
     safe_uri = urljoin(ORDER_DETAIL_BASE_URL, f"?{urlencode(query_params)}")
-    print(f"DEBUG: Safe URI = {safe_uri}")
 
     bubble = {
         "type": "bubble",
@@ -121,12 +120,9 @@ def build_order_flex(order_id, order_items, delivery, total, store_info='', orde
     
     # Serialize to JSON
     json_str = json.dumps(bubble, ensure_ascii=False)
-    print(f"DEBUG: json_str = {json_str}")
 
     # Final safety check - clean any URI patterns with trailing semicolons
     json_str = json_str.replace('https', 'http')
-
-    print(f"DEBUG: 訂單通知 Flex Bubble = {json_str}")
     
     # Load back the cleaned JSON
     bubble = json.loads(json_str)

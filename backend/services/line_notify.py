@@ -1,7 +1,5 @@
 import requests
 import logging
-import json
-import copy
 from backend.config import LINE_CHANNEL_ACCESS_TOKEN
 
 # === Send LINE Flex or Text message ===
@@ -40,14 +38,6 @@ def send_line_message(uid, message_type='text', content='Hello'):
         )
 
         print(f"📤 LINE 推播結果：{response.status_code}")
-        print("DEBUG: LINE API 回應 headers =", response.headers)
-        print("DEBUG: LINE API 回應 body =", response.text)
-
-        try:
-            response_json = response.json()
-            print("DEBUG: LINE API 回應 JSON =", json.dumps(response_json, ensure_ascii=False))
-        except ValueError:
-            print("DEBUG: LINE API 回應非 JSON 格式")
 
         if response.status_code != 200:
             logging.error("❌ 推播失敗：%s %s", response.status_code, response.text)
