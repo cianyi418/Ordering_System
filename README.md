@@ -1,14 +1,33 @@
 # Ordering System
 
+## Table of Contents
+
+- [Ordering System](#ordering-system)
+  - [Table of Contents](#table-of-contents)
+  - [專案簡介](#專案簡介)
+  - [系統架構圖](#系統架構圖)
+  - [操作流程](#操作流程)
+    - [使用者操作流程](#使用者操作流程)
+    - [管理者操作流程](#管理者操作流程)
+  - [系統截圖](#系統截圖)
+    - [使用者](#使用者)
+    - [管理者](#管理者)
+  - [專案架構](#專案架構)
+    - [1. 前端 (Frontend)](#1-前端-frontend)
+    - [2. 後端 (Backend)](#2-後端-backend)
+    - [3. 測試 (Tests)](#3-測試-tests)
+    - [4. 靜態資源 (Assets)](#4-靜態資源-assets)
+    - [5. 環境變數](#5-環境變數)
+    - [6. 部署](#6-部署)
+    - [7. 開發指南](#7-開發指南)
+
 ## 專案簡介
 
 這是一個完整的訂單管理系統，包含前端使用者介面與管理者介面，後端 API 整合 Google Sheets 與 JSON 檔案進行資料存取。系統支援以下功能：
 
-- **使用者介面**: 提供訂單查詢與提交功能，整合 LINE LIFF 身分驗證。
+- **使用者介面**: 透過 LINE rich menu 存取系統，整合 LINE LIFF 身分驗證，提供訂單查詢與提交功能。
 - **管理者介面**: 管理菜單、查詢與修改訂單狀態、設定運費規則。
 - **後端 API**: 使用 Flask 框架，處理邏輯與資料存取，並透過 LINE Flex Message 傳送訂單資訊。
-
-系統架構設計簡潔且高效，適合展示於作品集，並可作為中小型訂單管理系統的基礎。
 
 ## 系統架構圖
 
@@ -40,6 +59,63 @@
     FLASK -->|存取/更新| SHEETS
     FLASK --> FLEX
 ```
+
+## 操作流程
+
+### 使用者操作流程
+
+![使用者操作流程](assets/screenshot/user_flow.png)
+
+### 管理者操作流程
+
+![管理者操作流程](assets/screenshot/admin_flow.png)
+
+## 系統截圖
+
+### 使用者
+
+1. LINE Rich Menu
+
+   ![Line Rich Menu](assets/screenshot/user/line_richmenu.jpeg)
+
+2. 訂購畫面
+
+   ![User Ordering Page](assets/screenshot/user/user_orderingpage.png)
+
+3. 訂單預覽
+
+   ![User Order Review](assets/screenshot/user/usrer_orderreview.png)
+
+4. 訂購人資訊
+
+   ![User Enrty Info](assets/screenshot/user/user_entryinfo.png)
+
+5. 訂單確認通知
+
+   ![Line Flex Message](assets/screenshot/user/user_flexmessage.png)
+
+6. 查詢訂單
+
+    ![Order Status](assets/screenshot/user/order_status.png)
+
+7. 聯絡客服
+
+    ![Contact Support](assets/screenshot/user/line_contact.jpeg)
+
+### 管理者
+
+1. 訂單管理
+
+    ![Order Management](assets/screenshot/admin/admin_orders.png)
+    ![OrderSheet](assets/screenshot/admin/orders_sheet.png)
+
+2. 菜單管理
+
+    ![Menu Management](assets/screenshot/admin/admin_products.png)
+
+3. 運費規則設定
+
+    ![Shipping Rule Management](assets/screenshot/admin/admin_shipping.png)
 
 ## 專案架構
 
