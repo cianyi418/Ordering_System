@@ -6,3 +6,4 @@ oauth2client
 python-dotenv
 line-bot-sdk
 gunicorn
+requests==2.32.3

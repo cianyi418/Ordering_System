@@ -23,8 +23,8 @@ const shippingRules = ref({
   "face_to_face": [{ regions: "", free_shipping_min: 0 }]
 });
 
-const shippingOptions = ["未出貨", "已出貨"];
-const paymentOptions = ["未付款", "已付款"];
+const shippingOptions = ["未出貨", "已出貨", "取消"];
+const paymentOptions = ["未付款", "已付款", "貨到付款"];
 
 const filteredOrders = computed(() => {
   return orders.value.filter((order) => {
@@ -239,7 +239,7 @@ onMounted(() => {
     </div>
 
     <div v-else class="max-w-4xl mx-auto p-6">
-      <h1 class="text-2xl font-bold mb-4">⚙️ 老宅私廚 後台管理</h1>
+      <h1 class="text-2xl font-bold mb-4">⚙️ Cozy Eats 後台管理</h1>
       <div class="text-right mb-4">
         <button
           @click="logout"
@@ -263,46 +263,31 @@ onMounted(() => {
 
       <!-- 訂單管理 -->
       <div v-if="view === 'orders'">
-        <div class="mb-4 flex flex-col sm:flex-row sm:items-center gap-2">
+        <div class="mb-2 flex gap-4 items-center">
+        <!-- 篩選條件 -->
           <input
             v-model="search"
             type="text"
-            placeholder="搜尋訂單編號 / LINE ID"
-            class="w-full sm:w-80 px-4 py-2 border rounded shadow-sm focus:outline-none focus:ring"
+            placeholder="搜尋 ID 或訂單編號"
+            class="px-3 py-2 border rounded w-full h-10"
           />
-
-          <select v-model="filterPayment" class="px-2 py-2 border rounded">
+          <select v-model="filterPayment" class="px-2 py-1 border rounded h-10">
             <option value="所有付款狀態">所有付款狀態</option>
-            <option value="未付款">未付款</option>
-            <option value="已付款">已付款</option>
-            <option value="貨到付款">貨到付款</option>
+            <option v-for="option in paymentOptions" :key="option" :value="option">
+              {{ option }}
+            </option>
           </select>
-
-          <select v-model="filterShipping" class="px-2 py-2 border rounded">
+          <select v-model="filterShipping" class="px-2 py-1 border rounded h-10">
             <option value="所有出貨狀態">所有出貨狀態</option>
-            <option value="未出貨">未出貨</option>
-            <option value="已出貨">已出貨</option>
-            <option value="取消">取消</option>
+            <option v-for="option in shippingOptions" :key="option" :value="option">
+              {{ option }}
+            </option>
           </select>
-
-          <p class="text-sm text-gray-500 sm:ml-auto">
-            目前共 {{ Object.keys(groupedOrders).length }} 筆訂單
-          </p>
         </div>
 
-        <div
-          v-if="Object.keys(groupedOrders).length === 0"
-          class="text-center text-gray-400 py-12"
-        >
-          尚無訂單資料
-        </div>
-
-        <div class="space-y-4">
-          <div v-for="(orderItems, orderId) in groupedOrders" :key="orderId">
-              <div
-              v-if="orderItems && orderItems.length"
-              class="bg-white rounded shadow p-4"
-              >
+        <div v-for="(orderItems, orderId) in groupedOrders" :key="orderId" class="mb-4">
+          <div v-if="orderItems && orderItems.length" class="bg-white rounded shadow p-4">
+            <!-- 訂單標題 -->
             <div class="flex justify-between items-center border-b pb-2 mb-2">
               <div>
                 <p class="text-xs text-gray-500">訂單編號：{{ orderId }}</p>
@@ -314,6 +299,7 @@ onMounted(() => {
                 <p class="text-blue-600 font-bold text-lg">
                   總額：${{ calcOrderTotal(orderItems) }}
                 </p>
+                <!-- 付款狀態 -->
                 <select
                   v-if="orderItems[0]"
                   v-model="orderItems[0]['付款狀態']"
@@ -330,7 +316,7 @@ onMounted(() => {
                   <option value="已付款">已付款</option>
                   <option value="貨到付款">貨到付款</option>
                 </select>
-
+                <!-- 出貨狀態 -->
                 <select
                   v-if="orderItems[0]"
                   v-model="orderItems[0]['出貨狀態']"
@@ -346,9 +332,10 @@ onMounted(() => {
                   <option value="已出貨">已出貨</option>
                   <option value="取消">取消</option>
                 </select>
-                </div>
               </div>
             </div>
+
+            <!-- 訂單內容 -->
             <ul class="divide-y">
               <li
                 v-for="item in orderItems"
@@ -359,20 +346,16 @@ onMounted(() => {
                 <span>${{ item["小計金額"] }}</span>
               </li>
             </ul>
+
+            <!-- 備註與其他資訊 -->
             <p class="text-sm text-gray-500 mt-2">
-              <span v-if="orderItems[0]?.['備註']" class="block"
-                >備註：{{ orderItems[0]["備註"] }}</span
-              >
-              <span v-if="orderItems[0]?.['取貨方式']" class="block"
-                >取貨方式：{{ orderItems[0]["取貨方式"] }}</span
-              >
-              <span v-if="orderItems[0]?.['門市資訊']" class="block"
-                >門市資訊：{{ orderItems[0]["門市資訊"] }}</span
-              >
-              <span v-if="orderItems[0]?.['狀態修改時間']" class="block"
-                >狀態修改：{{ orderItems[0]["狀態修改時間"] }}</span
-              >
+              <span v-if="orderItems[0]?.['備註']" class="block">備註：{{ orderItems[0]["備註"] }}</span>
+              <span v-if="orderItems[0]?.['取貨方式']" class="block">取貨方式：{{ orderItems[0]["取貨方式"] }}</span>
+              <span v-if="orderItems[0]?.['門市資訊']" class="block">門市資訊：{{ orderItems[0]["門市資訊"] }}</span>
+              <span v-if="orderItems[0]?.['狀態修改時間']" class="block">狀態修改：{{ orderItems[0]["狀態修改時間"] }}</span>
             </p>
+
+            <!-- 小計與運費 -->
             <p class="text-sm text-gray-600 mt-2">
               商品小計：${{ getSubtotal(orderItems) }}<br />
               運費：${{ getShippingFee(orderItems) }}

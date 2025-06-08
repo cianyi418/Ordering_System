@@ -1,7 +1,7 @@
 import json
 from datetime import datetime
 from backend.config import ORDER_DETAIL_BASE_URL
-from urllib.parse import quote
+from urllib.parse import quote, urlencode, urljoin
 
 def build_order_flex(order_id, order_items, delivery, total, store_info='', order_time=None):
     max_display = 5
@@ -36,11 +36,9 @@ def build_order_flex(order_id, order_items, delivery, total, store_info='', orde
     shipping_fee = int(next((item['price'] for item in order_items if item['product'] == '運費'), 0))
     order_time_str = order_time or datetime.now().strftime("%Y-%m-%d %H:%M")
 
-    uri = f"{ORDER_DETAIL_BASE_URL}?order_id={order_id}".strip()
-    safe_uri = quote(uri, safe=":/?=&")  # keep URL structure, escape others
-    safe_uri = safe_uri.replace(";", "").rstrip("/")
-    assert not safe_uri.endswith(";"), f"❌ URI 含有非法分號: {safe_uri}"
-    print("DEBUG: 安全的 URI =", safe_uri)
+    # Safely encode query parameters
+    query_params = {"order_id": order_id}
+    safe_uri = urljoin(ORDER_DETAIL_BASE_URL, f"?{urlencode(query_params)}")
 
     bubble = {
         "type": "bubble",
@@ -49,7 +47,7 @@ def build_order_flex(order_id, order_items, delivery, total, store_info='', orde
             "type": "box",
             "layout": "vertical",
             "contents": [
-                {"type": "text", "text": "🧾 老宅私廚 訂單成立", "weight": "bold", "size": "md", "color": "#1DB446"},
+                {"type": "text", "text": "🧾 Cozy Eats 訂單成立", "weight": "bold", "size": "md", "color": "#1DB446"},
                 {"type": "text", "text": f"訂單編號：{order_id}", "size": "xs", "color": "#999999"},
                 {"type": "text", "text": f"下單時間：{order_time_str}", "size": "xs", "color": "#999999"}
             ]
@@ -105,14 +103,29 @@ def build_order_flex(order_id, order_items, delivery, total, store_info='', orde
         }
     }
 
-    print("DEBUG: 訂單通知 Flex Bubble =", json.dumps(bubble, ensure_ascii=False))
+    # Clean all URI fields in the bubble object
+    def clean_uri_fields(obj):
+        if isinstance(obj, dict):
+            for key, value in obj.items():
+                if key == "uri" and isinstance(value, str):
+                    obj[key] = value.strip().rstrip(";")
+                elif isinstance(value, (dict, list)):
+                    clean_uri_fields(value)
+        elif isinstance(obj, list):
+            for item in obj:
+                clean_uri_fields(item)
+        return obj
+    
+    bubble = clean_uri_fields(bubble)
+    
+    # Serialize to JSON
+    json_str = json.dumps(bubble, ensure_ascii=False)
 
-
-    test_bubble = {
-        "type": "uri",
-        "uri": "https://liff.line.me/2007342518-gOdj1LKl/order?order_id=ORDER-1748628036844-3825"
-        }
-    print("DEBUG: Test JSON =", json.dumps(test_bubble, ensure_ascii=False))
+    # Final safety check - clean any URI patterns with trailing semicolons
+    json_str = json_str.replace('https', 'http')
+    
+    # Load back the cleaned JSON
+    bubble = json.loads(json_str)
 
     return {
         "altText": f"訂單成立通知：{order_id}",
